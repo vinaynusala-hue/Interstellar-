@@ -1,23 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
-<meta name="theme-color" content="#02030a">
-
-<title>INFINITE — A Journey Beyond Space</title>
-
-<!-- THREE.JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<title>∞ MOTION — The Animated Web</title>
 
 <style>
-
 /* =========================================================
-   GLOBAL
+   RESET
 ========================================================= */
 
 *{
@@ -28,1423 +20,1092 @@ content="width=device-width, initial-scale=1.0">
 
 html{
     scroll-behavior:smooth;
-    background:#000;
 }
 
 body{
-    background:#000;
+    background:#02020b;
     color:#fff;
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
     overflow-x:hidden;
     cursor:none;
 }
 
-/* =========================================================
-   LOADER
-========================================================= */
-
-#loader{
-
-    position:fixed;
-
-    inset:0;
-
-    background:#000;
-
-    z-index:999999;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    flex-direction:column;
-
-    transition:
-        opacity 1.2s ease,
-        visibility 1.2s ease;
-
-}
-
-#loader.hidden{
-
-    opacity:0;
-
-    visibility:hidden;
-
-}
-
-.loader-orbit{
-
-    width:120px;
-    height:120px;
-
-    border:
-        1px solid
-        rgba(0,220,255,.4);
-
-    border-radius:50%;
-
-    position:relative;
-
-    animation:
-        loaderRotate
-        2s
-        linear
-        infinite;
-
-}
-
-.loader-orbit::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:12px;
-    height:12px;
-
-    background:#00eaff;
-
-    border-radius:50%;
-
-    top:-6px;
-    left:50%;
-
-    box-shadow:
-        0 0 20px #00eaff,
-        0 0 50px #00eaff;
-
-}
-
-.loader-text{
-
-    margin-top:35px;
-
-    letter-spacing:8px;
-
-    font-size:12px;
-
-    color:#00eaff;
-
-    animation:
-        loaderPulse
-        2s
-        infinite;
-
-}
-
-@keyframes loaderRotate{
-
-    to{
-        transform:rotate(360deg);
-    }
-
-}
-
-@keyframes loaderPulse{
-
-    0%,100%{
-        opacity:.3;
-    }
-
-    50%{
-        opacity:1;
-    }
-
+a{
+    color:inherit;
+    text-decoration:none;
 }
 
 /* =========================================================
-   THREE.JS CANVAS
-========================================================= */
-
-#spaceCanvas{
-
-    position:fixed;
-
-    inset:0;
-
-    width:100%;
-    height:100%;
-
-    z-index:-10;
-
-}
-
-/* =========================================================
-   CINEMATIC VIGNETTE
-========================================================= */
-
-.vignette{
-
-    position:fixed;
-
-    inset:0;
-
-    pointer-events:none;
-
-    z-index:100;
-
-    background:
-        radial-gradient(
-            circle,
-            transparent 35%,
-            rgba(0,0,0,.45) 100%
-        );
-
-}
-
-/* =========================================================
-   CURSOR
+   CUSTOM CURSOR
 ========================================================= */
 
 .cursor{
-
     position:fixed;
-
-    width:30px;
-    height:30px;
-
-    border:
-        1px solid
-        #00eaff;
-
+    width:18px;
+    height:18px;
+    border:2px solid #fff;
     border-radius:50%;
-
     pointer-events:none;
-
     z-index:99999;
-
-    transform:
-        translate(-50%,-50%);
-
-    box-shadow:
-        0 0 10px #00eaff,
-        0 0 30px rgba(0,234,255,.7);
-
+    transform:translate(-50%,-50%);
+    mix-blend-mode:difference;
     transition:
-        width .25s,
-        height .25s,
-        border .25s;
-
+        width .2s,
+        height .2s,
+        background .2s;
 }
 
-.cursor::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:4px;
-    height:4px;
-
-    background:#fff;
-
-    border-radius:50%;
-
-    left:50%;
-    top:50%;
-
-    transform:
-        translate(-50%,-50%);
-
-    box-shadow:
-        0 0 10px #fff;
-
-}
-
-.cursor-ring{
-
+.cursor-dot{
     position:fixed;
+    width:5px;
+    height:5px;
+    background:#fff;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:100000;
+    transform:translate(-50%,-50%);
+}
 
+.cursor.big{
     width:55px;
     height:55px;
-
-    border:
-        1px solid
-        rgba(0,234,255,.2);
-
-    border-radius:50%;
-
-    pointer-events:none;
-
-    z-index:99998;
-
-    transform:
-        translate(-50%,-50%);
-
+    background:#fff;
+    mix-blend-mode:difference;
 }
 
 /* =========================================================
-   CURSOR TRAIL
+   BACKGROUND
 ========================================================= */
 
-.trail{
-
+body::before{
+    content:"";
     position:fixed;
+    inset:0;
+    z-index:-10;
 
-    width:5px;
-    height:5px;
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(92,53,255,.22),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(0,230,255,.16),
+            transparent 30%
+        ),
+        #02020b;
+}
 
-    border-radius:50%;
+.grid{
+    position:fixed;
+    inset:0;
+    z-index:-7;
 
-    background:#00eaff;
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.035) 1px,
+            transparent 1px
+        );
 
+    background-size:50px 50px;
+
+    transform:
+        perspective(500px)
+        rotateX(60deg)
+        translateY(15%);
+
+    transform-origin:center bottom;
+
+    animation:gridMove 10s linear infinite;
+}
+
+@keyframes gridMove{
+    from{
+        background-position:0 0;
+    }
+    to{
+        background-position:0 500px;
+    }
+}
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+#particles{
+    position:fixed;
+    inset:0;
+    z-index:-5;
     pointer-events:none;
+}
 
-    z-index:99990;
+.particle{
+    position:absolute;
+    width:3px;
+    height:3px;
+    border-radius:50%;
+    background:#fff;
 
     box-shadow:
-        0 0 15px #00eaff;
+        0 0 10px #fff,
+        0 0 20px rgba(0,220,255,.8);
 
+    animation:
+        particleFloat linear infinite;
+}
+
+@keyframes particleFloat{
+    0%{
+        transform:translate3d(0,110vh,0);
+        opacity:0;
+    }
+
+    15%{
+        opacity:1;
+    }
+
+    85%{
+        opacity:1;
+    }
+
+    100%{
+        transform:translate3d(
+            var(--moveX),
+            -20vh,
+            var(--moveZ)
+        );
+        opacity:0;
+    }
 }
 
 /* =========================================================
    NAVIGATION
 ========================================================= */
 
-.nav{
-
+nav{
     position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
 
-    top:0;
-    left:0;
-
-    width:100%;
-
-    height:80px;
-
-    padding:
-        0 6%;
+    width:min(92%,1000px);
 
     display:flex;
-
+    justify-content:space-between;
     align-items:center;
 
-    justify-content:space-between;
+    padding:14px 20px;
+
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:100px;
+
+    background:rgba(5,5,20,.45);
+    backdrop-filter:blur(20px);
 
     z-index:5000;
 
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(0,0,0,.65),
-            transparent
-        );
-
-    transition:
-        background .5s;
-
-}
-
-.nav.scrolled{
-
-    background:
-        rgba(0,0,0,.55);
-
-    backdrop-filter:
-        blur(20px);
-
-    border-bottom:
-        1px solid
-        rgba(0,234,255,.1);
-
+    box-shadow:
+        0 10px 50px rgba(0,0,0,.3),
+        inset 0 0 30px rgba(255,255,255,.03);
 }
 
 .logo{
-
     font-size:20px;
-
-    letter-spacing:6px;
-
-    color:#fff;
-
-}
-
-.logo span{
-
-    color:#00eaff;
-
-    text-shadow:
-        0 0 20px #00eaff;
-
-}
-
-.nav-links{
-
-    display:flex;
-
-    gap:35px;
-
-    list-style:none;
-
-}
-
-.nav-links a{
-
-    text-decoration:none;
-
-    color:#aeb9ca;
-
-    font-size:11px;
-
-    letter-spacing:2px;
-
-    position:relative;
-
-    transition:.3s;
-
-}
-
-.nav-links a::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:0;
-
-    height:1px;
-
-    left:0;
-    bottom:-7px;
-
-    background:#00eaff;
-
-    box-shadow:
-        0 0 10px #00eaff;
-
-    transition:.4s;
-
-}
-
-.nav-links a:hover{
-
-    color:#fff;
-
-}
-
-.nav-links a:hover::after{
-
-    width:100%;
-
-}
-
-/* =========================================================
-   MUSIC
-========================================================= */
-
-.music{
-
-    position:fixed;
-
-    right:25px;
-    bottom:25px;
-
-    width:55px;
-    height:55px;
-
-    border:
-        1px solid
-        rgba(0,234,255,.4);
-
-    border-radius:50%;
+    font-weight:900;
+    letter-spacing:4px;
 
     background:
-        rgba(0,0,0,.4);
+        linear-gradient(
+            90deg,
+            #fff,
+            #00eaff,
+            #8a5cff,
+            #fff
+        );
 
-    backdrop-filter:
-        blur(15px);
+    background-size:300%;
 
-    color:#00eaff;
+    -webkit-background-clip:text;
+    color:transparent;
 
-    z-index:6000;
-
-    cursor:none;
-
-    box-shadow:
-        0 0 20px
-        rgba(0,234,255,.15);
-
+    animation:gradientFlow 5s linear infinite;
 }
 
-.music-bars{
+@keyframes gradientFlow{
+    to{
+        background-position:300%;
+    }
+}
 
+.navlinks{
     display:flex;
-
-    align-items:flex-end;
-
-    justify-content:center;
-
-    gap:3px;
-
-    height:18px;
-
+    gap:25px;
 }
 
-.music-bars span{
-
-    width:2px;
-
-    background:#00eaff;
-
-    height:8px;
-
-    animation:
-        musicBar
-        .8s
-        ease-in-out
-        infinite;
-
+.navlinks a{
+    font-size:12px;
+    letter-spacing:2px;
+    opacity:.7;
+    transition:.3s;
 }
 
-.music-bars span:nth-child(2){
-
-    animation-delay:.15s;
-
-}
-
-.music-bars span:nth-child(3){
-
-    animation-delay:.3s;
-
-}
-
-.music-bars span:nth-child(4){
-
-    animation-delay:.45s;
-
-}
-
-@keyframes musicBar{
-
-    0%,100%{
-        height:5px;
-    }
-
-    50%{
-        height:18px;
-    }
-
+.navlinks a:hover{
+    opacity:1;
+    text-shadow:
+        0 0 10px #00eaff,
+        0 0 30px #00eaff;
 }
 
 /* =========================================================
    HERO
 ========================================================= */
 
-.hero{
-
-    min-height:100vh;
-
+section{
     position:relative;
+    min-height:100vh;
+    padding:120px 7%;
+}
 
+.hero{
     display:flex;
-
-    align-items:center;
-
     justify-content:center;
-
+    align-items:center;
     text-align:center;
-
-    padding:
-        100px 20px;
-
+    overflow:hidden;
 }
 
 .hero-content{
+    position:relative;
+    z-index:10;
+}
+
+.mini{
+    letter-spacing:8px;
+    font-size:11px;
+    opacity:.6;
+    margin-bottom:25px;
+    animation:fadeUp 1.5s ease forwards;
+}
+
+.hero h1{
+    font-size:
+        clamp(65px,14vw,190px);
+
+    line-height:.8;
+    letter-spacing:-8px;
 
     position:relative;
 
-    z-index:20;
-
-    max-width:1000px;
-
-}
-
-.eyebrow{
-
-    color:#00eaff;
-
-    letter-spacing:
-        10px;
-
-    font-size:10px;
-
-    margin-bottom:30px;
-
-    text-transform:
-        uppercase;
-
     animation:
-        glowPulse
-        3s
-        infinite;
-
+        heroEnter 2s cubic-bezier(.16,1,.3,1);
 }
 
-@keyframes glowPulse{
-
-    0%,100%{
-
-        opacity:.5;
-
-        text-shadow:
-            0 0 5px #00eaff;
-
+@keyframes heroEnter{
+    from{
+        opacity:0;
+        transform:
+            translateY(100px)
+            scale(.7)
+            rotateX(50deg);
+        filter:blur(20px);
     }
 
-    50%{
-
+    to{
         opacity:1;
-
-        text-shadow:
-            0 0 10px #00eaff,
-            0 0 30px #00eaff;
-
+        transform:none;
+        filter:none;
     }
-
 }
 
-.hero-title{
+.hero h1 span{
+    display:block;
 
-    font-size:
-        clamp(
-            65px,
-            14vw,
-            190px
+    background:
+        linear-gradient(
+            120deg,
+            #fff,
+            #a3f7ff,
+            #6b5cff,
+            #fff
         );
 
-    line-height:.78;
+    background-size:400%;
 
-    letter-spacing:
-        -9px;
+    -webkit-background-clip:text;
+    color:transparent;
+
+    animation:
+        gradientFlow 6s linear infinite;
+}
+
+.hero-sub{
+    margin:45px auto;
+    max-width:600px;
+    color:#aaa;
+    line-height:1.8;
+    font-size:15px;
+}
+
+.btns{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    position:relative;
+    padding:16px 30px;
+    border-radius:50px;
+    border:1px solid rgba(255,255,255,.2);
+
+    background:rgba(255,255,255,.04);
+
+    backdrop-filter:blur(10px);
+
+    overflow:hidden;
+
+    transition:.4s;
+
+    letter-spacing:2px;
+    font-size:11px;
+}
+
+.btn::before{
+    content:"";
+    position:absolute;
+    inset:-100%;
+    background:
+        conic-gradient(
+            transparent,
+            #00eaff,
+            transparent 30%
+        );
+
+    animation:spin 4s linear infinite;
+}
+
+.btn::after{
+    content:"";
+    position:absolute;
+    inset:2px;
+    background:#050510;
+    border-radius:50px;
+}
+
+.btn span{
+    position:relative;
+    z-index:2;
+}
+
+.btn:hover{
+    transform:
+        translateY(-6px)
+        scale(1.04);
+
+    box-shadow:
+        0 15px 60px rgba(0,220,255,.2);
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* =========================================================
+   3D PLANET
+========================================================= */
+
+.planet-wrap{
+    position:absolute;
+    width:400px;
+    height:400px;
+
+    right:5%;
+    top:20%;
+
+    perspective:1000px;
+    opacity:.65;
+}
+
+.planet{
+    position:absolute;
+    inset:50px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            #fff,
+            #5c63ff 8%,
+            #14145b 35%,
+            #03030b 70%
+        );
+
+    box-shadow:
+        inset -40px -30px 80px #000,
+        0 0 70px rgba(91,83,255,.5);
+
+    animation:
+        planetRotate 12s linear infinite,
+        planetFloat 5s ease-in-out infinite;
+}
+
+@keyframes planetRotate{
+    to{
+        transform:rotateY(360deg);
+    }
+}
+
+@keyframes planetFloat{
+    50%{
+        transform:translateY(-25px);
+    }
+}
+
+.ring{
+    position:absolute;
+    inset:30px;
+
+    border:
+        2px solid rgba(0,238,255,.4);
+
+    border-radius:50%;
+
+    transform:
+        rotateX(65deg)
+        rotateZ(20deg);
+
+    animation:ringSpin 8s linear infinite;
+}
+
+.ring:nth-child(2){
+    transform:
+        rotateX(70deg)
+        rotateZ(-30deg);
+
+    border-color:
+        rgba(143,74,255,.4);
+
+    animation-duration:12s;
+}
+
+.ring:nth-child(3){
+    inset:5px;
+
+    transform:
+        rotateX(75deg)
+        rotateY(20deg);
+
+    border-color:
+        rgba(255,255,255,.15);
+
+    animation-duration:18s;
+}
+
+@keyframes ringSpin{
+    to{
+        transform:
+            rotateX(65deg)
+            rotateZ(380deg);
+    }
+}
+
+/* =========================================================
+   MARQUEE
+========================================================= */
+
+.marquee{
+    min-height:auto;
+    padding:25px 0;
+
+    overflow:hidden;
+
+    border-top:1px solid rgba(255,255,255,.08);
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    background:rgba(255,255,255,.02);
+}
+
+.marquee-track{
+    display:flex;
+    width:max-content;
+
+    animation:
+        marquee 20s linear infinite;
+}
+
+.marquee span{
+    font-size:
+        clamp(40px,7vw,100px);
 
     font-weight:900;
 
-    text-transform:
-        uppercase;
+    margin-right:50px;
 
-    background:
-        linear-gradient(
-            180deg,
-            #fff 0%,
-            #a8f3ff 40%,
-            #006eff 100%
-        );
-
-    -webkit-background-clip:
-        text;
+    -webkit-text-stroke:
+        1px rgba(255,255,255,.3);
 
     color:transparent;
-
-    filter:
-        drop-shadow(
-            0 0 25px
-            rgba(0,210,255,.2)
-        );
-
 }
 
-.hero-subtitle{
-
-    max-width:700px;
-
-    margin:
-        40px auto 0;
-
-    color:#8f9eb4;
-
-    font-size:16px;
-
-    line-height:1.9;
-
+@keyframes marquee{
+    to{
+        transform:translateX(-50%);
+    }
 }
 
-.enter{
+/* =========================================================
+   SECTION TITLE
+========================================================= */
 
-    display:inline-flex;
+.section-title{
+    margin-bottom:70px;
+}
 
-    align-items:center;
-
-    gap:15px;
-
-    margin-top:45px;
-
-    padding:
-        17px 30px;
-
-    border:
-        1px solid
-        #00eaff;
-
-    border-radius:50px;
-
-    text-decoration:none;
-
+.section-title small{
     color:#00eaff;
-
-    font-size:11px;
-
-    letter-spacing:3px;
-
-    transition:
-        .4s;
-
-    box-shadow:
-        0 0 20px
-        rgba(0,234,255,.12);
-
+    letter-spacing:5px;
+    font-size:10px;
 }
 
-.enter:hover{
-
-    color:#000;
-
-    background:#00eaff;
-
-    box-shadow:
-        0 0 30px #00eaff,
-        0 0 80px
-        rgba(0,234,255,.7);
-
-    transform:
-        translateY(-5px);
-
-}
-
-.enter-arrow{
-
-    font-size:18px;
-
-}
-
-/* =========================================================
-   SCROLL INDICATOR
-========================================================= */
-
-.scroll-indicator{
-
-    position:absolute;
-
-    bottom:30px;
-
-    left:50%;
-
-    transform:
-        translateX(-50%);
-
-    color:#68788e;
-
-    font-size:9px;
-
-    letter-spacing:4px;
-
-}
-
-.scroll-line{
-
-    width:1px;
-
-    height:55px;
-
-    margin:
-        12px auto 0;
-
-    background:
-        linear-gradient(
-            transparent,
-            #00eaff,
-            transparent
-        );
-
-    animation:
-        scrollLine
-        2s
-        infinite;
-
-}
-
-@keyframes scrollLine{
-
-    0%{
-        transform:
-            scaleY(0);
-        transform-origin:top;
-    }
-
-    50%{
-        transform:
-            scaleY(1);
-        transform-origin:top;
-    }
-
-    51%{
-        transform-origin:bottom;
-    }
-
-    100%{
-        transform:
-            scaleY(0);
-        transform-origin:bottom;
-    }
-
-}
-
-/* =========================================================
-   SECTIONS
-========================================================= */
-
-.section{
-
-    min-height:100vh;
-
-    position:relative;
-
-    padding:
-        150px 7%;
-
-    display:flex;
-
-    align-items:center;
-
-}
-
-.container{
-
-    width:100%;
-
-    max-width:1250px;
-
-    margin:auto;
-
-}
-
-.section-heading{
-
+.section-title h2{
     font-size:
-        clamp(
-            40px,
-            7vw,
-            90px
-        );
+        clamp(45px,8vw,100px);
 
-    letter-spacing:
-        -4px;
-
-    line-height:.95;
-
-    margin-bottom:25px;
-
-}
-
-.section-heading span{
-
-    color:#00eaff;
-
-    text-shadow:
-        0 0 30px
-        rgba(0,234,255,.5);
-
-}
-
-.section-description{
-
-    color:#8795a9;
-
-    max-width:650px;
-
-    line-height:1.9;
-
-    font-size:15px;
-
+    margin-top:15px;
+    letter-spacing:-4px;
 }
 
 /* =========================================================
-   GLASS CARDS
+   ANIMATION CARDS
 ========================================================= */
 
-.card-grid{
-
+.cards{
     display:grid;
-
     grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(240px,1fr)
-        );
+        repeat(3,1fr);
 
-    gap:25px;
-
-    margin-top:65px;
-
+    gap:20px;
 }
 
-.glass-card{
-
+.card{
     position:relative;
+    min-height:320px;
 
-    min-height:240px;
-
-    padding:35px;
+    padding:30px;
 
     border:
-        1px solid
-        rgba(255,255,255,.1);
+        1px solid rgba(255,255,255,.1);
+
+    border-radius:25px;
 
     background:
         linear-gradient(
             145deg,
-            rgba(255,255,255,.06),
-            rgba(0,0,0,.15)
+            rgba(255,255,255,.07),
+            rgba(255,255,255,.015)
         );
 
-    backdrop-filter:
-        blur(20px);
-
-    border-radius:24px;
+    backdrop-filter:blur(15px);
 
     overflow:hidden;
 
-    transform-style:
-        preserve-3d;
+    transform-style:preserve-3d;
 
     transition:
-        transform .5s,
-        border .5s,
-        box-shadow .5s;
-
+        transform .15s,
+        border .3s,
+        box-shadow .3s;
 }
 
-.glass-card::before{
-
+.card::before{
     content:"";
-
     position:absolute;
 
-    width:150px;
-    height:150px;
+    width:180px;
+    height:180px;
 
-    border-radius:50%;
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,230,255,.35),
+            transparent 70%
+        );
 
-    background:#00eaff;
+    top:
+        var(--y,50%);
+    left:
+        var(--x,50%);
 
-    filter:blur(80px);
+    transform:translate(-50%,-50%);
 
-    opacity:0;
-
-    transition:.5s;
-
+    opacity:.5;
+    pointer-events:none;
 }
 
-.glass-card:hover{
-
+.card:hover{
     border-color:
-        rgba(0,234,255,.5);
+        rgba(0,230,255,.5);
 
     box-shadow:
-        0 20px 80px
-        rgba(0,0,0,.5),
-        0 0 30px
-        rgba(0,234,255,.08);
-
-}
-
-.glass-card:hover::before{
-
-    opacity:.12;
-
+        0 30px 80px rgba(0,0,0,.4),
+        inset 0 0 40px rgba(0,230,255,.05);
 }
 
 .card-number{
-
-    font-size:12px;
-
-    color:#00eaff;
-
-    letter-spacing:3px;
-
-    margin-bottom:30px;
-
+    font-size:80px;
+    font-weight:900;
+    opacity:.08;
 }
 
-.glass-card h3{
-
-    font-size:25px;
-
-    margin-bottom:15px;
-
+.card-icon{
+    font-size:50px;
+    margin:25px 0;
 }
 
-.glass-card p{
+.card h3{
+    font-size:22px;
+    margin-bottom:12px;
+}
 
-    color:#7f8da1;
-
-    line-height:1.8;
-
-    font-size:14px;
-
+.card p{
+    color:#888;
+    line-height:1.7;
+    font-size:13px;
 }
 
 /* =========================================================
-   BLACK HOLE SECTION
+   3D SHAPES
 ========================================================= */
 
-.blackhole-section{
-
-    min-height:120vh;
-
+.showcase{
     display:flex;
-
-    align-items:center;
-
     justify-content:center;
-
-    position:relative;
-
-    overflow:hidden;
-
+    align-items:center;
+    min-height:700px;
+    perspective:1200px;
 }
 
-.blackhole{
-
-    width:
-        min(42vw,420px);
-
-    height:
-        min(42vw,420px);
-
-    border-radius:50%;
-
+.cube{
+    width:200px;
+    height:200px;
     position:relative;
 
-    background:#000;
-
-    box-shadow:
-
-        0 0 20px
-        #ffcf65,
-
-        0 0 60px
-        rgba(255,100,0,.8),
-
-        0 0 130px
-        rgba(255,50,0,.45);
+    transform-style:preserve-3d;
 
     animation:
-        blackholeFloat
-        5s
-        ease-in-out
-        infinite;
-
+        cubeRotate 15s linear infinite;
 }
 
-.blackhole::before{
-
-    content:"";
-
+.face{
     position:absolute;
+    width:200px;
+    height:200px;
 
-    inset:-90px;
+    border:
+        2px solid rgba(0,240,255,.5);
+
+    background:
+        rgba(0,180,255,.04);
+
+    box-shadow:
+        inset 0 0 50px rgba(0,240,255,.08),
+        0 0 40px rgba(0,240,255,.1);
+
+    backdrop-filter:blur(5px);
+}
+
+.front{
+    transform:translateZ(100px);
+}
+
+.back{
+    transform:rotateY(180deg) translateZ(100px);
+}
+
+.right{
+    transform:
+        rotateY(90deg)
+        translateZ(100px);
+}
+
+.left{
+    transform:
+        rotateY(-90deg)
+        translateZ(100px);
+}
+
+.top{
+    transform:
+        rotateX(90deg)
+        translateZ(100px);
+}
+
+.bottom{
+    transform:
+        rotateX(-90deg)
+        translateZ(100px);
+}
+
+@keyframes cubeRotate{
+    from{
+        transform:
+            rotateX(0)
+            rotateY(0)
+            rotateZ(0);
+    }
+
+    to{
+        transform:
+            rotateX(360deg)
+            rotateY(720deg)
+            rotateZ(360deg);
+    }
+}
+
+/* =========================================================
+   ORBIT SYSTEM
+========================================================= */
+
+.orbit-system{
+    width:400px;
+    height:400px;
+
+    position:relative;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.core{
+    width:90px;
+    height:90px;
 
     border-radius:50%;
 
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #fff,
+            #00eaff,
+            #653cff
+        );
+
+    box-shadow:
+        0 0 30px #00eaff,
+        0 0 100px rgba(89,65,255,.8);
+
+    animation:
+        corePulse 2s ease-in-out infinite;
+}
+
+@keyframes corePulse{
+    50%{
+        transform:scale(1.15);
+        box-shadow:
+            0 0 60px #00eaff,
+            0 0 150px rgba(89,65,255,.8);
+    }
+}
+
+.orbit{
+    position:absolute;
+    inset:20px;
+
     border:
-        18px solid
-        transparent;
+        1px solid rgba(255,255,255,.2);
 
-    border-top-color:#ffe58b;
-
-    border-bottom-color:#ff5100;
-
-    filter:blur(5px);
+    border-radius:50%;
 
     transform:
-        rotate(-20deg);
+        rotateX(65deg);
 
     animation:
-        accretion
-        5s
-        linear
-        infinite;
-
+        orbitRotate 8s linear infinite;
 }
 
-.blackhole::after{
+.orbit:nth-child(2){
+    inset:60px;
+    transform:
+        rotateY(70deg);
 
-    content:"";
-
-    position:absolute;
-
-    inset:-50px;
-
-    border-radius:50%;
-
-    border:
-        8px solid
-        transparent;
-
-    border-left-color:#fff;
-
-    border-right-color:#ff6a00;
-
-    animation:
-        accretion
-        3s
-        linear
-        infinite
-        reverse;
-
+    animation-duration:5s;
 }
 
-@keyframes accretion{
-
-    to{
-        transform:
-            rotate(360deg);
-    }
-
-}
-
-@keyframes blackholeFloat{
-
-    0%,100%{
-        transform:
-            scale(1)
-            translateY(0);
-    }
-
-    50%{
-        transform:
-            scale(1.05)
-            translateY(-15px);
-    }
-
-}
-
-.blackhole-text{
-
-    position:absolute;
-
-    bottom:13%;
-
-    text-align:center;
-
-    width:100%;
-
-}
-
-.blackhole-text h2{
-
-    font-size:
-        clamp(
-            35px,
-            6vw,
-            80px
-        );
-
-    letter-spacing:
-        -3px;
-
-}
-
-.blackhole-text p{
-
-    color:#7f8da1;
-
-    margin-top:15px;
-
-}
-
-/* =========================================================
-   HYPERSPACE
-========================================================= */
-
-.hyperspace{
-
-    min-height:100vh;
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    overflow:hidden;
-
-}
-
-.warp-lines{
-
-    position:absolute;
-
+.orbit:nth-child(3){
     inset:0;
+    transform:
+        rotateX(70deg)
+        rotateZ(50deg);
 
+    animation-duration:13s;
 }
 
-.warp-line{
-
+.orbit-dot{
     position:absolute;
-
-    left:50%;
-
-    top:50%;
-
-    width:2px;
-
-    height:150px;
-
-    background:
-        linear-gradient(
-            transparent,
-            #00eaff,
-            transparent
-        );
-
-    transform-origin:
-        50% 100%;
-
-    opacity:.3;
-
-    animation:
-        warp
-        1.5s
-        linear
-        infinite;
-
-}
-
-@keyframes warp{
-
-    from{
-
-        transform:
-            rotate(var(--angle))
-            translateY(0)
-            scaleY(.2);
-
-        opacity:0;
-
-    }
-
-    30%{
-        opacity:.8;
-    }
-
-    to{
-
-        transform:
-            rotate(var(--angle))
-            translateY(-700px)
-            scaleY(2);
-
-        opacity:0;
-
-    }
-
-}
-
-.hyperspace-content{
-
-    position:relative;
-
-    z-index:10;
-
-    text-align:center;
-
-}
-
-.hyperspace-content h2{
-
-    font-size:
-        clamp(
-            50px,
-            10vw,
-            130px
-        );
-
-    letter-spacing:
-        -6px;
-
-}
-
-.hyperspace-content p{
-
-    color:#8795a9;
-
-    margin-top:20px;
-
-}
-
-/* =========================================================
-   COSMIC TIMELINE
-========================================================= */
-
-.timeline{
-
-    position:relative;
-
-    max-width:900px;
-
-    margin:
-        80px auto 0;
-
-}
-
-.timeline::before{
-
-    content:"";
-
-    position:absolute;
-
-    left:50%;
-
-    top:0;
-    bottom:0;
-
-    width:1px;
-
-    background:
-        linear-gradient(
-            transparent,
-            #00eaff,
-            transparent
-        );
-
-}
-
-.timeline-item{
-
-    width:50%;
-
-    padding:
-        30px 45px;
-
-    position:relative;
-
-}
-
-.timeline-item:nth-child(
-    even
-){
-
-    margin-left:50%;
-
-}
-
-.timeline-item:nth-child(
-    odd
-){
-
-    text-align:right;
-
-}
-
-.timeline-dot{
-
-    position:absolute;
-
-    width:12px;
-    height:12px;
-
-    border-radius:50%;
+    width:14px;
+    height:14px;
 
     background:#00eaff;
+    border-radius:50%;
+
+    top:-7px;
+    left:50%;
 
     box-shadow:
-        0 0 10px #00eaff,
-        0 0 30px #00eaff;
-
-    right:-6px;
-
-    top:40px;
-
+        0 0 15px #00eaff,
+        0 0 40px #00eaff;
 }
 
-.timeline-item:nth-child(
-    even
-)
-.timeline-dot{
-
-    left:-6px;
-    right:auto;
-
-}
-
-.timeline-item h3{
-
-    color:#00eaff;
-
-    margin-bottom:12px;
-
-}
-
-.timeline-item p{
-
-    color:#75849a;
-
-    line-height:1.8;
-
+@keyframes orbitRotate{
+    to{
+        transform:
+            rotateX(65deg)
+            rotateZ(360deg);
+    }
 }
 
 /* =========================================================
-   FINAL MESSAGE
+   COUNTERS
+========================================================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:20px;
+}
+
+.stat{
+    text-align:center;
+    padding:40px 20px;
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    border-radius:20px;
+
+    background:
+        rgba(255,255,255,.025);
+}
+
+.stat strong{
+    display:block;
+
+    font-size:
+        clamp(40px,6vw,80px);
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #00eaff
+        );
+
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.stat span{
+    color:#777;
+    font-size:11px;
+    letter-spacing:3px;
+}
+
+/* =========================================================
+   WAVE
+========================================================= */
+
+.wave{
+    position:absolute;
+    bottom:-1px;
+    left:0;
+
+    width:100%;
+    height:150px;
+
+    overflow:hidden;
+}
+
+.wave div{
+    position:absolute;
+    width:200%;
+    height:200%;
+
+    border-radius:40%;
+
+    border-top:
+        1px solid rgba(0,230,255,.2);
+
+    animation:
+        waveMove 12s linear infinite;
+}
+
+.wave div:nth-child(2){
+    animation-duration:18s;
+    opacity:.4;
+}
+
+@keyframes waveMove{
+    from{
+        transform:
+            translateX(-20%)
+            rotate(0deg);
+    }
+
+    to{
+        transform:
+            translateX(-50%)
+            rotate(360deg);
+    }
+}
+
+/* =========================================================
+   SHOOTING STARS
+========================================================= */
+
+.shooting{
+    position:fixed;
+
+    width:150px;
+    height:1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #fff
+        );
+
+    transform:rotate(-35deg);
+
+    z-index:-3;
+
+    animation:
+        shoot 4s linear infinite;
+}
+
+.shooting:nth-child(1){
+    top:20%;
+    left:-20%;
+}
+
+.shooting:nth-child(2){
+    top:50%;
+    left:-20%;
+    animation-delay:2s;
+}
+
+@keyframes shoot{
+    0%{
+        transform:
+            translate(0,0)
+            rotate(-35deg);
+        opacity:0;
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translate(130vw,80vh)
+            rotate(-35deg);
+        opacity:0;
+    }
+}
+
+/* =========================================================
+   GLITCH
+========================================================= */
+
+.glitch{
+    position:relative;
+    display:inline-block;
+}
+
+.glitch::before,
+.glitch::after{
+    content:attr(data-text);
+
+    position:absolute;
+    left:0;
+    top:0;
+
+    width:100%;
+    overflow:hidden;
+
+    opacity:.5;
+}
+
+.glitch::before{
+    color:#00ffff;
+    animation:glitch1 2s infinite;
+}
+
+.glitch::after{
+    color:#ff00ff;
+    animation:glitch2 1.7s infinite;
+}
+
+@keyframes glitch1{
+    0%,90%,100%{
+        clip-path:inset(0 0 100% 0);
+    }
+
+    92%{
+        clip-path:inset(20% 0 50% 0);
+        transform:translate(-5px);
+    }
+}
+
+@keyframes glitch2{
+    0%,85%,100%{
+        clip-path:inset(100% 0 0 0);
+    }
+
+    88%{
+        clip-path:inset(50% 0 20% 0);
+        transform:translate(5px);
+    }
+}
+
+/* =========================================================
+   FINAL SECTION
 ========================================================= */
 
 .final{
-
-    min-height:100vh;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     text-align:center;
-
-    padding:50px 20px;
-
 }
 
 .final h2{
-
     font-size:
-        clamp(
-            50px,
-            10vw,
-            140px
-        );
-
-    letter-spacing:
-        -7px;
+        clamp(55px,11vw,150px);
 
     line-height:.85;
-
-}
-
-.final h2 span{
-
-    color:#00eaff;
-
+    letter-spacing:-7px;
 }
 
 .final p{
-
-    max-width:600px;
-
-    margin:
-        40px auto;
-
-    color:#7f8da1;
-
-    line-height:1.9;
-
+    margin:40px auto;
+    max-width:550px;
+    color:#777;
+    line-height:1.8;
 }
 
 /* =========================================================
@@ -1452,26 +1113,17 @@ body{
 ========================================================= */
 
 footer{
-
-    padding:
-        60px 20px;
-
-    text-align:center;
+    padding:30px 7%;
 
     border-top:
-        1px solid
-        rgba(255,255,255,.08);
+        1px solid rgba(255,255,255,.08);
 
-    color:#4f5d70;
+    display:flex;
+    justify-content:space-between;
 
-}
-
-footer strong{
-
-    color:#00eaff;
-
-    letter-spacing:4px;
-
+    color:#555;
+    font-size:11px;
+    letter-spacing:2px;
 }
 
 /* =========================================================
@@ -1479,36 +1131,27 @@ footer strong{
 ========================================================= */
 
 .reveal{
-
     opacity:0;
-
     transform:
         translateY(80px)
-        scale(.96);
+        scale(.95);
+
+    filter:blur(10px);
 
     transition:
-        opacity 1s ease,
-        transform 1s cubic-bezier(
-            .16,
-            1,
-            .3,
-            1
-        );
-
+        opacity 1s,
+        transform 1s,
+        filter 1s;
 }
 
 .reveal.active{
-
     opacity:1;
-
-    transform:
-        translateY(0)
-        scale(1);
-
+    transform:none;
+    filter:none;
 }
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE
 ========================================================= */
 
 @media(max-width:800px){
@@ -1518,650 +1161,314 @@ footer strong{
     }
 
     .cursor,
-    .cursor-ring,
-    .trail{
+    .cursor-dot{
         display:none;
     }
 
-    .nav{
-
-        height:65px;
-
-        padding:
-            0 20px;
-
+    nav{
+        top:10px;
     }
 
-    .nav-links{
-
+    .navlinks{
         display:none;
-
     }
 
-    .logo{
-
-        font-size:15px;
-
+    .hero h1{
+        letter-spacing:-5px;
     }
 
-    .hero-title{
+    .planet-wrap{
+        width:250px;
+        height:250px;
 
-        letter-spacing:
-            -4px;
+        right:-80px;
+        top:15%;
 
+        opacity:.35;
     }
 
-    .hero-subtitle{
-
-        font-size:14px;
-
+    .cards{
+        grid-template-columns:1fr;
     }
 
-    .section{
-
-        padding:
-            100px 20px;
-
+    .stats{
+        grid-template-columns:
+            repeat(2,1fr);
     }
 
-    .section-heading{
-
-        letter-spacing:
-            -2px;
-
+    .cube{
+        width:140px;
+        height:140px;
     }
 
-    .blackhole{
-
-        width:220px;
-        height:220px;
-
+    .face{
+        width:140px;
+        height:140px;
     }
 
-    .blackhole::before{
-
-        inset:-55px;
-
+    .front{
+        transform:translateZ(70px);
     }
 
-    .blackhole::after{
-
-        inset:-35px;
-
+    .back{
+        transform:
+            rotateY(180deg)
+            translateZ(70px);
     }
 
-    .timeline::before{
-
-        left:10px;
-
+    .right{
+        transform:
+            rotateY(90deg)
+            translateZ(70px);
     }
 
-    .timeline-item,
-    .timeline-item:nth-child(
-        even
-    ){
-
-        width:100%;
-
-        margin-left:0;
-
-        padding:
-            25px
-            20px
-            25px
-            40px;
-
-        text-align:left;
-
+    .left{
+        transform:
+            rotateY(-90deg)
+            translateZ(70px);
     }
 
-    .timeline-dot,
-    .timeline-item:nth-child(
-        even
-    ) .timeline-dot{
-
-        left:4px;
-
-        right:auto;
-
+    .top{
+        transform:
+            rotateX(90deg)
+            translateZ(70px);
     }
 
-    .music{
-
-        width:48px;
-        height:48px;
-
-        right:15px;
-        bottom:15px;
-
+    .bottom{
+        transform:
+            rotateX(-90deg)
+            translateZ(70px);
     }
 
+    .orbit-system{
+        transform:scale(.75);
+    }
+
+    footer{
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+    }
+}
+
+@media(max-width:450px){
+
+    section{
+        padding-left:20px;
+        padding-right:20px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .hero-sub{
+        font-size:13px;
+    }
+
+    .section-title h2{
+        letter-spacing:-2px;
+    }
 }
 
 </style>
-
 </head>
 
 <body>
 
-<!-- =======================================================
-     LOADER
-======================================================= -->
-
-<div id="loader">
-
-    <div class="loader-orbit"></div>
-
-    <div class="loader-text">
-        INITIALIZING UNIVERSE
-    </div>
-
-</div>
-
-
-<!-- =======================================================
-     THREE.JS CANVAS
-======================================================= -->
-
-<canvas id="spaceCanvas"></canvas>
-
-<div class="vignette"></div>
-
-
-<!-- =======================================================
+<!-- =====================================================
      CURSOR
-======================================================= -->
+===================================================== -->
 
 <div class="cursor"></div>
+<div class="cursor-dot"></div>
 
-<div class="cursor-ring"></div>
+<!-- =====================================================
+     BACKGROUND
+===================================================== -->
 
+<div class="grid"></div>
 
-<!-- =======================================================
-     AUDIO
-======================================================= -->
+<div id="particles"></div>
 
-<audio
-    id="music"
-    loop
-    preload="auto">
+<div class="shooting"></div>
+<div class="shooting"></div>
 
-    <source
-        src="Interstellar Main Theme - Hans Zimmer (1).mp3"
-        type="audio/mpeg">
+<!-- =====================================================
+     NAV
+===================================================== -->
 
-</audio>
-
-<button
-    class="music"
-    id="musicButton">
-
-    <div class="music-bars">
-
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-
-    </div>
-
-</button>
-
-
-<!-- =======================================================
-     NAVIGATION
-======================================================= -->
-
-<header class="nav">
+<nav>
 
     <div class="logo">
-        IN<span>∞</span>FINITE
+        ∞ MOTION
     </div>
 
-    <ul class="nav-links">
+    <div class="navlinks">
+        <a href="#home">HOME</a>
+        <a href="#effects">EFFECTS</a>
+        <a href="#dimension">3D</a>
+        <a href="#system">SYSTEM</a>
+        <a href="#end">END</a>
+    </div>
 
-        <li>
-            <a href="#home">
-                HOME
-            </a>
-        </li>
+</nav>
 
-        <li>
-            <a href="#universe">
-                UNIVERSE
-            </a>
-        </li>
-
-        <li>
-            <a href="#blackhole">
-                BLACK HOLE
-            </a>
-        </li>
-
-        <li>
-            <a href="#timeline">
-                JOURNEY
-            </a>
-        </li>
-
-    </ul>
-
-</header>
-
-
-<!-- =======================================================
+<!-- =====================================================
      HERO
-======================================================= -->
+===================================================== -->
 
-<section
-    class="hero"
-    id="home">
+<section class="hero" id="home">
 
     <div class="hero-content">
 
-        <div class="eyebrow">
-            A CINEMATIC JOURNEY THROUGH SPACE
+        <div class="mini">
+            ENTER THE EXPERIENCE
         </div>
 
-        <h1 class="hero-title">
-            INFINITE
+        <h1 class="glitch"
+            data-text="MOTION">
+
+            <span>MOTION</span>
+            <span>BEYOND</span>
+
         </h1>
 
-        <p class="hero-subtitle">
-
-            There are places beyond imagination,
-            worlds beyond our horizon,
-            and mysteries hidden inside the
-            darkness between the stars.
-
-            <br><br>
-
-            This is your journey beyond the known.
-
+        <p class="hero-sub">
+            This isn't a website designed to be watched.
+            It's a digital environment designed to move,
+            react, transform and breathe with you.
         </p>
 
-        <a
-            href="#universe"
-            class="enter">
+        <div class="btns">
 
-            ENTER THE UNIVERSE
+            <a class="btn magnetic" href="#effects">
+                <span>EXPLORE</span>
+            </a>
 
-            <span class="enter-arrow">
-                →
-            </span>
+            <a class="btn magnetic" href="#dimension">
+                <span>ENTER 3D</span>
+            </a>
 
-        </a>
+        </div>
 
     </div>
 
+    <!-- PLANET -->
 
-    <div class="scroll-indicator">
+    <div class="planet-wrap">
 
-        SCROLL
+        <div class="planet"></div>
 
-        <div class="scroll-line"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
 
     </div>
 
 </section>
 
+<!-- =====================================================
+     MARQUEE
+===================================================== -->
 
-<!-- =======================================================
-     UNIVERSE
-======================================================= -->
+<section class="marquee">
 
-<section
-    class="section"
-    id="universe">
+    <div class="marquee-track">
 
-    <div class="container">
+        <span>CREATE</span>
+        <span>MOVE</span>
+        <span>EXPLORE</span>
+        <span>IMAGINE</span>
+        <span>CREATE</span>
+        <span>MOVE</span>
+        <span>EXPLORE</span>
+        <span>IMAGINE</span>
 
-        <div class="reveal">
+    </div>
 
-            <div class="eyebrow">
-                01 — THE COSMOS
+</section>
+
+<!-- =====================================================
+     EFFECTS
+===================================================== -->
+
+<section id="effects">
+
+    <div class="section-title reveal">
+
+        <small>01 / MOTION ENGINE</small>
+
+        <h2>
+            EVERYTHING
+            <br>
+            MOVES.
+        </h2>
+
+    </div>
+
+    <div class="cards">
+
+        <div class="card reveal">
+
+            <div class="card-number">
+                01
             </div>
 
-            <h2 class="section-heading">
+            <div class="card-icon">
+                ✦
+            </div>
 
-                WE LIVE INSIDE
-                <br>
+            <h3>
+                PARTICLES
+            </h3>
 
-                AN <span>INFINITE</span>
-                MYSTERY.
-
-            </h2>
-
-            <p class="section-description">
-
-                The universe contains galaxies,
-                stars, planets, nebulae, black holes
-                and structures spanning unimaginable
-                distances.
-
-                <br><br>
-
-                Humanity has only begun to explore
-                the cosmic ocean surrounding our
-                small world.
-
+            <p>
+                Thousands of tiny elements create a living
+                atmosphere that continuously evolves.
             </p>
 
         </div>
 
+        <div class="card reveal">
 
-        <div class="card-grid">
-
-
-            <article class="glass-card reveal">
-
-                <div class="card-number">
-                    01 / GALAXIES
-                </div>
-
-                <h3>
-                    COSMIC CITIES
-                </h3>
-
-                <p>
-
-                    Galaxies are enormous gravitational
-                    systems containing stars, planets,
-                    gas, dust and dark matter.
-
-                </p>
-
-            </article>
-
-
-            <article class="glass-card reveal">
-
-                <div class="card-number">
-                    02 / STARS
-                </div>
-
-                <h3>
-                    STELLAR ENGINES
-                </h3>
-
-                <p>
-
-                    Stars shine because nuclear fusion
-                    releases enormous amounts of energy
-                    inside their cores.
-
-                </p>
-
-            </article>
-
-
-            <article class="glass-card reveal">
-
-                <div class="card-number">
-                    03 / NEBULAE
-                </div>
-
-                <h3>
-                    STAR FACTORIES
-                </h3>
-
-                <p>
-
-                    Vast clouds of gas and dust can
-                    become stellar nurseries where
-                    new stars are born.
-
-                </p>
-
-            </article>
-
-
-            <article class="glass-card reveal">
-
-                <div class="card-number">
-                    04 / WORLDS
-                </div>
-
-                <h3>
-                    EXOPLANETS
-                </h3>
-
-                <p>
-
-                    Thousands of planets have been
-                    discovered orbiting stars beyond
-                    our Solar System.
-
-                </p>
-
-            </article>
-
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =======================================================
-     BLACK HOLE
-======================================================= -->
-
-<section
-    class="blackhole-section"
-    id="blackhole">
-
-    <div class="blackhole"></div>
-
-    <div class="blackhole-text reveal">
-
-        <div class="eyebrow">
-            02 — GRAVITY
-        </div>
-
-        <h2>
-            INTO THE
-            <span style="color:#ff8c00">
-                DARK
-            </span>
-        </h2>
-
-        <p>
-
-            Beyond an event horizon,
-            escape becomes impossible
-            according to classical general relativity.
-
-        </p>
-
-    </div>
-
-</section>
-
-
-<!-- =======================================================
-     HYPERSPACE
-======================================================= -->
-
-<section class="hyperspace">
-
-    <div
-        class="warp-lines"
-        id="warpLines">
-    </div>
-
-    <div
-        class="hyperspace-content reveal">
-
-        <div class="eyebrow">
-            03 — BEYOND LIGHT
-        </div>
-
-        <h2>
-            WARP
-        </h2>
-
-        <p>
-            Imagine crossing the cosmic distance
-            between worlds.
-        </p>
-
-    </div>
-
-</section>
-
-
-<!-- =======================================================
-     TIMELINE
-======================================================= -->
-
-<section
-    class="section"
-    id="timeline">
-
-    <div class="container">
-
-        <div
-            class="reveal"
-            style="text-align:center">
-
-            <div class="eyebrow">
-                04 — COSMIC HISTORY
+            <div class="card-number">
+                02
             </div>
 
-            <h2 class="section-heading">
-                A JOURNEY THROUGH
-                <span>TIME</span>
-            </h2>
+            <div class="card-icon">
+                ◉
+            </div>
 
-            <p
-                class="section-description"
-                style="margin:auto">
+            <h3>
+                PARALLAX
+            </h3>
 
-                From the early universe to the
-                emergence of life on Earth.
-
+            <p>
+                Objects react to your movement, creating
+                the illusion of depth and physical space.
             </p>
 
         </div>
 
+        <div class="card reveal">
 
-        <div class="timeline">
-
-
-            <div class="timeline-item reveal">
-
-                <div class="timeline-dot"></div>
-
-                <h3>
-                    THE EARLY UNIVERSE
-                </h3>
-
-                <p>
-
-                    The universe began in an extremely
-                    hot and dense state and subsequently
-                    expanded and cooled.
-
-                </p>
-
+            <div class="card-number">
+                03
             </div>
 
-
-            <div class="timeline-item reveal">
-
-                <div class="timeline-dot"></div>
-
-                <h3>
-                    FIRST STARS
-                </h3>
-
-                <p>
-
-                    After the early universe cooled,
-                    gravity eventually brought matter
-                    together to form the first stars.
-
-                </p>
-
+            <div class="card-icon">
+                ∞
             </div>
 
+            <h3>
+                INFINITE
+            </h3>
 
-            <div class="timeline-item reveal">
-
-                <div class="timeline-dot"></div>
-
-                <h3>
-                    GALAXIES
-                </h3>
-
-                <p>
-
-                    Gravity assembled stars and matter
-                    into immense galactic structures.
-
-                </p>
-
-            </div>
-
-
-            <div class="timeline-item reveal">
-
-                <div class="timeline-dot"></div>
-
-                <h3>
-                    OUR SOLAR SYSTEM
-                </h3>
-
-                <p>
-
-                    The Sun and planets formed from
-                    a rotating disk of gas and dust
-                    around 4.6 billion years ago.
-
-                </p>
-
-            </div>
-
-
-            <div class="timeline-item reveal">
-
-                <div class="timeline-dot"></div>
-
-                <h3>
-                    EARTH
-                </h3>
-
-                <p>
-
-                    Earth became a dynamic world
-                    containing liquid water and,
-                    eventually, life.
-
-                </p>
-
-            </div>
-
-
-            <div class="timeline-item reveal">
-
-                <div class="timeline-dot"></div>
-
-                <h3>
-                    HUMANITY
-                </h3>
-
-                <p>
-
-                    Humans developed the ability to
-                    observe the universe and send
-                    machines beyond our planet.
-
-                </p>
-
-            </div>
-
+            <p>
+                Animations never really stop. The environment
+                continuously transforms around you.
+            </p>
 
         </div>
 
@@ -2169,736 +1476,311 @@ footer strong{
 
 </section>
 
+<!-- =====================================================
+     3D CUBE
+===================================================== -->
 
-<!-- =======================================================
+<section id="dimension">
+
+    <div class="section-title reveal">
+
+        <small>02 / DIMENSION</small>
+
+        <h2>
+            ENTER
+            <br>
+            THE CUBE.
+        </h2>
+
+    </div>
+
+    <div class="showcase reveal">
+
+        <div class="cube">
+
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face right"></div>
+            <div class="face left"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     ORBIT SYSTEM
+===================================================== -->
+
+<section id="system">
+
+    <div class="section-title reveal">
+
+        <small>03 / CORE SYSTEM</small>
+
+        <h2>
+            A WORLD
+            <br>
+            IN ORBIT.
+        </h2>
+
+    </div>
+
+    <div class="showcase">
+
+        <div class="orbit-system reveal">
+
+            <div class="core"></div>
+
+            <div class="orbit">
+                <div class="orbit-dot"></div>
+            </div>
+
+            <div class="orbit">
+                <div class="orbit-dot"></div>
+            </div>
+
+            <div class="orbit">
+                <div class="orbit-dot"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     STATS
+===================================================== -->
+
+<section>
+
+    <div class="section-title reveal">
+
+        <small>04 / NUMBERS</small>
+
+        <h2>
+            MOTION
+            <br>
+            WITHOUT LIMIT.
+        </h2>
+
+    </div>
+
+    <div class="stats">
+
+        <div class="stat reveal">
+
+            <strong data-target="999">0</strong>
+
+            <span>
+                PARTICLES
+            </span>
+
+        </div>
+
+        <div class="stat reveal">
+
+            <strong data-target="360">0</strong>
+
+            <span>
+                DEGREES
+            </span>
+
+        </div>
+
+        <div class="stat reveal">
+
+            <strong data-target="100">0</strong>
+
+            <span>
+                % MOTION
+            </span>
+
+        </div>
+
+        <div class="stat reveal">
+
+            <strong data-target="∞">0</strong>
+
+            <span>
+                POSSIBILITY
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
      FINAL
-======================================================= -->
+===================================================== -->
 
-<section class="final">
+<section class="final" id="end">
 
     <div class="reveal">
 
-        <div class="eyebrow">
-            THE JOURNEY CONTINUES
+        <div class="mini">
+            THERE IS NO FINAL FRAME
         </div>
 
         <h2>
-            LOOK
+            KEEP
             <br>
-            <span>UP.</span>
+            MOVING.
         </h2>
 
         <p>
-
-            Every star is a reminder that the
-            universe is larger than our imagination.
-
-            <br><br>
-
-            The next great discovery may still
-            be waiting beyond the horizon.
-
+            Scroll back. Move your pointer. Touch the screen.
+            Every interaction changes the experience.
         </p>
 
-        <a
-            href="#home"
-            class="enter">
+        <div class="btns">
 
-            RETURN TO THE STARS
-            →
-            
-        </a>
+            <a class="btn magnetic" href="#home">
+                <span>RETURN TO BEGINNING</span>
+            </a>
 
+        </div>
+
+    </div>
+
+    <div class="wave">
+        <div></div>
+        <div></div>
     </div>
 
 </section>
 
-
-<!-- =======================================================
+<!-- =====================================================
      FOOTER
-======================================================= -->
+===================================================== -->
 
 <footer>
 
-    <p>
-        A DIGITAL JOURNEY THROUGH THE COSMOS
-    </p>
+    <div>
+        ∞ MOTION
+    </div>
 
-    <br>
+    <div>
+        AN EXPERIENCE WITHOUT A SUBJECT
+    </div>
 
-    <strong>
-        IN∞FINITE
-    </strong>
-
-    <br><br>
-
-    <small>
-        Explore • Imagine • Discover
-    </small>
+    <div>
+        © 2026
+    </div>
 
 </footer>
 
-
-<!-- =======================================================
+<!-- =====================================================
      JAVASCRIPT
-======================================================= -->
+===================================================== -->
 
 <script>
 
 /* =========================================================
-   LOADER
+   PARTICLES
 ========================================================= */
 
-window.addEventListener(
-    "load",
-    () => {
+const particleContainer =
+    document.getElementById("particles");
 
-        setTimeout(
-            () => {
+const particleCount = 180;
 
-                document
-                .getElementById("loader")
-                .classList
-                .add("hidden");
+for(let i=0;i<particleCount;i++){
 
-            },
-            1200
-        );
+    const p =
+        document.createElement("div");
 
-    }
-);
+    p.className = "particle";
 
+    p.style.left =
+        Math.random()*100 + "%";
 
-/* =========================================================
-   THREE.JS
-========================================================= */
+    p.style.animationDuration =
+        (5 + Math.random()*15) + "s";
 
-const canvas =
-    document.getElementById(
-        "spaceCanvas"
+    p.style.animationDelay =
+        (-Math.random()*20) + "s";
+
+    p.style.setProperty(
+        "--moveX",
+        ((Math.random()-.5)*400) + "px"
     );
 
-const scene =
-    new THREE.Scene();
-
-
-/* CAMERA */
-
-const camera =
-    new THREE.PerspectiveCamera(
-        60,
-        window.innerWidth /
-        window.innerHeight,
-        0.1,
-        3000
+    p.style.setProperty(
+        "--moveZ",
+        ((Math.random()-.5)*300) + "px"
     );
 
-camera.position.z =
-    25;
+    const size =
+        1 + Math.random()*3;
 
+    p.style.width =
+        size + "px";
 
-/* RENDERER */
+    p.style.height =
+        size + "px";
 
-const renderer =
-    new THREE.WebGLRenderer({
-        canvas:canvas,
-        antialias:true,
-        alpha:true
-    });
-
-renderer.setPixelRatio(
-    Math.min(
-        window.devicePixelRatio,
-        2
-    )
-);
-
-renderer.setSize(
-    window.innerWidth,
-    window.innerHeight
-);
-
-
-/* =========================================================
-   STAR FIELD
-========================================================= */
-
-const starCount =
-    window.innerWidth < 700
-    ? 7000
-    : 14000;
-
-const positions =
-    new Float32Array(
-        starCount * 3
-    );
-
-const colors =
-    new Float32Array(
-        starCount * 3
-    );
-
-for(
-    let i=0;
-    i<starCount;
-    i++
-){
-
-    const radius =
-        50 +
-        Math.random()*1000;
-
-    const theta =
-        Math.random() *
-        Math.PI * 2;
-
-    const phi =
-        Math.acos(
-            2*Math.random()-1
-        );
-
-    positions[i*3] =
-        radius *
-        Math.sin(phi) *
-        Math.cos(theta);
-
-    positions[i*3+1] =
-        radius *
-        Math.sin(phi) *
-        Math.sin(theta);
-
-    positions[i*3+2] =
-        radius *
-        Math.cos(phi);
-
-
-    const brightness =
-        .5 +
-        Math.random()*.5;
-
-    colors[i*3] =
-        brightness;
-
-    colors[i*3+1] =
-        brightness;
-
-    colors[i*3+2] =
-        1;
-
+    particleContainer.appendChild(p);
 }
 
 
-const starGeometry =
-    new THREE.BufferGeometry();
-
-starGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        positions,
-        3
-    )
-);
-
-starGeometry.setAttribute(
-    "color",
-    new THREE.BufferAttribute(
-        colors,
-        3
-    )
-);
-
-
-const starMaterial =
-    new THREE.PointsMaterial({
-
-        size:
-            window.innerWidth < 700
-            ? .65
-            : .85,
-
-        vertexColors:true,
-
-        transparent:true,
-
-        opacity:.85,
-
-        blending:
-            THREE.AdditiveBlending,
-
-        depthWrite:false
-
-    });
-
-
-const stars =
-    new THREE.Points(
-        starGeometry,
-        starMaterial
-    );
-
-scene.add(stars);
-
-
 /* =========================================================
-   GALAXY PARTICLES
-========================================================= */
-
-const galaxyCount =
-    window.innerWidth < 700
-    ? 4000
-    : 8000;
-
-const galaxyPositions =
-    new Float32Array(
-        galaxyCount*3
-    );
-
-for(
-    let i=0;
-    i<galaxyCount;
-    i++
-){
-
-    const radius =
-        Math.pow(
-            Math.random(),
-            .55
-        ) * 25;
-
-    const arm =
-        Math.floor(
-            Math.random()*5
-        );
-
-    const angle =
-        radius*.45 +
-        arm *
-        (
-            Math.PI*2/5
-        );
-
-    const spread =
-        (Math.random()-.5)
-        * .8;
-
-    galaxyPositions[i*3] =
-        Math.cos(
-            angle+spread
-        ) * radius;
-
-    galaxyPositions[i*3+1] =
-        (
-            Math.random()-.5
-        ) *
-        (
-            radius*.12
-        );
-
-    galaxyPositions[i*3+2] =
-        Math.sin(
-            angle+spread
-        ) * radius;
-
-}
-
-
-const galaxyGeometry =
-    new THREE.BufferGeometry();
-
-galaxyGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        galaxyPositions,
-        3
-    )
-);
-
-
-const galaxyMaterial =
-    new THREE.PointsMaterial({
-
-        color:0x48dfff,
-
-        size:.09,
-
-        transparent:true,
-
-        opacity:.6,
-
-        blending:
-            THREE.AdditiveBlending
-
-    });
-
-
-const galaxy =
-    new THREE.Points(
-        galaxyGeometry,
-        galaxyMaterial
-    );
-
-galaxy.rotation.x =
-    .4;
-
-scene.add(galaxy);
-
-
-/* =========================================================
-   FLOATING COSMIC DUST
-========================================================= */
-
-const dustCount = 3000;
-
-const dustPositions =
-    new Float32Array(
-        dustCount*3
-    );
-
-for(
-    let i=0;
-    i<dustCount;
-    i++
-){
-
-    dustPositions[i*3] =
-        (Math.random()-.5)*100;
-
-    dustPositions[i*3+1] =
-        (Math.random()-.5)*100;
-
-    dustPositions[i*3+2] =
-        (Math.random()-.5)*100;
-
-}
-
-const dustGeometry =
-    new THREE.BufferGeometry();
-
-dustGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        dustPositions,
-        3
-    )
-);
-
-const dustMaterial =
-    new THREE.PointsMaterial({
-
-        color:0x75dfff,
-
-        size:.035,
-
-        transparent:true,
-
-        opacity:.4
-
-    });
-
-const dust =
-    new THREE.Points(
-        dustGeometry,
-        dustMaterial
-    );
-
-scene.add(dust);
-
-
-/* =========================================================
-   MOUSE
-========================================================= */
-
-let mouseX = 0;
-let mouseY = 0;
-
-let targetX = 0;
-let targetY = 0;
-
-window.addEventListener(
-    "mousemove",
-    e => {
-
-        mouseX =
-            e.clientX /
-            window.innerWidth -
-            .5;
-
-        mouseY =
-            e.clientY /
-            window.innerHeight -
-            .5;
-
-        targetX =
-            mouseX;
-
-        targetY =
-            mouseY;
-
-    }
-);
-
-
-/* =========================================================
-   SCROLL
-========================================================= */
-
-let scrollY = 0;
-
-window.addEventListener(
-    "scroll",
-    () => {
-
-        scrollY =
-            window.scrollY;
-
-    }
-);
-
-
-/* =========================================================
-   ANIMATION LOOP
-========================================================= */
-
-const clock =
-    new THREE.Clock();
-
-function animate(){
-
-    requestAnimationFrame(
-        animate
-    );
-
-    const time =
-        clock.getElapsedTime();
-
-
-    /* STAR ROTATION */
-
-    stars.rotation.y =
-        time * .008;
-
-    stars.rotation.x =
-        time * .002;
-
-
-    /* GALAXY */
-
-    galaxy.rotation.y =
-        time * .025;
-
-    galaxy.rotation.z =
-        time * .008;
-
-
-    /* DUST */
-
-    dust.rotation.y =
-        -time * .003;
-
-
-    /* CAMERA MOUSE */
-
-    camera.position.x +=
-        (
-            targetX*3 -
-            camera.position.x
-        ) * .025;
-
-    camera.position.y +=
-        (
-            -targetY*2 -
-            camera.position.y
-        ) * .025;
-
-
-    /* CAMERA SCROLL */
-
-    camera.position.z =
-        25 +
-        Math.min(
-            scrollY*.003,
-            10
-        );
-
-
-    camera.lookAt(
-        0,
-        0,
-        0
-    );
-
-
-    renderer.render(
-        scene,
-        camera
-    );
-
-}
-
-animate();
-
-
-/* =========================================================
-   RESIZE
-========================================================= */
-
-window.addEventListener(
-    "resize",
-    () => {
-
-        camera.aspect =
-            window.innerWidth /
-            window.innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        );
-
-    }
-);
-
-
-/* =========================================================
-   CURSOR
+   CUSTOM CURSOR
 ========================================================= */
 
 const cursor =
-    document.querySelector(
-        ".cursor"
-    );
+    document.querySelector(".cursor");
 
-const cursorRing =
-    document.querySelector(
-        ".cursor-ring"
-    );
+const dot =
+    document.querySelector(".cursor-dot");
 
-let cx=0;
-let cy=0;
+let mouseX=0;
+let mouseY=0;
 
-let rx=0;
-let ry=0;
+let cursorX=0;
+let cursorY=0;
 
-window.addEventListener(
+document.addEventListener(
     "mousemove",
-    e => {
+    e=>{
 
-        cx=e.clientX;
-        cy=e.clientY;
+        mouseX=e.clientX;
+        mouseY=e.clientY;
+
+        dot.style.left =
+            mouseX+"px";
+
+        dot.style.top =
+            mouseY+"px";
 
     }
 );
 
-function cursorAnimation(){
+function cursorLoop(){
 
-    rx +=
-        (cx-rx)*.12;
+    cursorX +=
+        (mouseX-cursorX)*.18;
 
-    ry +=
-        (cy-ry)*.12;
+    cursorY +=
+        (mouseY-cursorY)*.18;
 
     cursor.style.left =
-        rx+"px";
+        cursorX+"px";
 
     cursor.style.top =
-        ry+"px";
+        cursorY+"px";
 
-    cursorRing.style.left =
-        cx+"px";
-
-    cursorRing.style.top =
-        cy+"px";
-
-    requestAnimationFrame(
-        cursorAnimation
-    );
-
+    requestAnimationFrame(cursorLoop);
 }
 
-cursorAnimation();
-
-
-/* =========================================================
-   CURSOR TRAIL
-========================================================= */
-
-const trails=[];
-
-for(
-    let i=0;
-    i<12;
-    i++
-){
-
-    const dot =
-        document.createElement(
-            "div"
-        );
-
-    dot.className="trail";
-
-    document.body.appendChild(
-        dot
-    );
-
-    trails.push({
-
-        el:dot,
-        x:0,
-        y:0
-
-    });
-
-}
-
-function trailAnimation(){
-
-    let x=cx;
-    let y=cy;
-
-    trails.forEach(
-        (dot,index)=>{
-
-            dot.x +=
-                (
-                    x-dot.x
-                ) *
-                (.20-index*.008);
-
-            dot.y +=
-                (
-                    y-dot.y
-                ) *
-                (.20-index*.008);
-
-            dot.el.style.left =
-                dot.x+"px";
-
-            dot.el.style.top =
-                dot.y+"px";
-
-            const scale =
-                1-index/
-                trails.length;
-
-            dot.el.style.opacity =
-                scale;
-
-            x=dot.x;
-            y=dot.y;
-
-        }
-    );
-
-    requestAnimationFrame(
-        trailAnimation
-    );
-
-}
-
-trailAnimation();
+cursorLoop();
 
 
 /* =========================================================
@@ -2906,40 +1788,24 @@ trailAnimation();
 ========================================================= */
 
 document
-.querySelectorAll(
-    "a,button,.glass-card"
-)
-.forEach(
-    element => {
+.querySelectorAll("a,.card,.cube")
+.forEach(el=>{
 
-        element.addEventListener(
-            "mouseenter",
-            () => {
+    el.addEventListener(
+        "mouseenter",
+        ()=>{
+            cursor.classList.add("big");
+        }
+    );
 
-                cursor.style.width =
-                    "55px";
+    el.addEventListener(
+        "mouseleave",
+        ()=>{
+            cursor.classList.remove("big");
+        }
+    );
 
-                cursor.style.height =
-                    "55px";
-
-            }
-        );
-
-        element.addEventListener(
-            "mouseleave",
-            () => {
-
-                cursor.style.width =
-                    "30px";
-
-                cursor.style.height =
-                    "30px";
-
-            }
-        );
-
-    }
-);
+});
 
 
 /* =========================================================
@@ -2947,93 +1813,126 @@ document
 ========================================================= */
 
 document
-.querySelectorAll(
-    ".glass-card"
-)
-.forEach(
-    card => {
+.querySelectorAll(".card")
+.forEach(card=>{
 
-        card.addEventListener(
-            "mousemove",
-            e => {
+    card.addEventListener(
+        "mousemove",
+        e=>{
 
-                const rect =
-                    card.getBoundingClientRect();
+            const rect =
+                card.getBoundingClientRect();
 
-                const x =
-                    e.clientX -
-                    rect.left;
+            const x =
+                e.clientX-rect.left;
 
-                const y =
-                    e.clientY -
-                    rect.top;
+            const y =
+                e.clientY-rect.top;
 
-                const rotateY =
-                    (
-                        x -
-                        rect.width/2
-                    ) / 18;
+            const centerX =
+                rect.width/2;
 
-                const rotateX =
-                    -(
-                        y -
-                        rect.height/2
-                    ) / 18;
+            const centerY =
+                rect.height/2;
 
-                card.style.transform =
-                    `
-                    perspective(900px)
-                    rotateX(${rotateX}deg)
-                    rotateY(${rotateY}deg)
-                    translateY(-8px)
-                    scale(1.02)
-                    `;
+            const rotateY =
+                (x-centerX)/15;
 
-            }
-        );
+            const rotateX =
+                -(y-centerY)/15;
 
-        card.addEventListener(
-            "mouseleave",
-            () => {
+            card.style.transform =
+                `perspective(700px)
+                 rotateX(${rotateX}deg)
+                 rotateY(${rotateY}deg)
+                 translateY(-8px)`;
 
-                card.style.transform =
-                    "";
+            card.style.setProperty(
+                "--x",
+                x+"px"
+            );
 
-            }
-        );
+            card.style.setProperty(
+                "--y",
+                y+"px"
+            );
 
-    }
-);
+        }
+    );
+
+    card.addEventListener(
+        "mouseleave",
+        ()=>{
+            card.style.transform =
+                "";
+        }
+    );
+
+});
 
 
 /* =========================================================
-   REVEAL ANIMATION
+   MAGNETIC BUTTONS
 ========================================================= */
 
-const reveals =
-    document.querySelectorAll(
-        ".reveal"
+document
+.querySelectorAll(".magnetic")
+.forEach(button=>{
+
+    button.addEventListener(
+        "mousemove",
+        e=>{
+
+            const rect =
+                button.getBoundingClientRect();
+
+            const x =
+                e.clientX -
+                rect.left -
+                rect.width/2;
+
+            const y =
+                e.clientY -
+                rect.top -
+                rect.height/2;
+
+            button.style.transform =
+                `translate(${x*.25}px,
+                           ${y*.25}px)
+                 scale(1.05)`;
+
+        }
     );
+
+    button.addEventListener(
+        "mouseleave",
+        ()=>{
+            button.style.transform="";
+        }
+    );
+
+});
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
 
 const observer =
     new IntersectionObserver(
-        entries => {
+        entries=>{
 
-            entries.forEach(
-                entry => {
+            entries.forEach(entry=>{
 
-                    if(
-                        entry.isIntersecting
-                    ){
+                if(entry.isIntersecting){
 
-                        entry.target
+                    entry.target
                         .classList
                         .add("active");
 
-                    }
-
                 }
-            );
+
+            });
 
         },
         {
@@ -3041,482 +1940,283 @@ const observer =
         }
     );
 
-reveals.forEach(
-    element =>
-        observer.observe(element)
+document
+.querySelectorAll(".reveal")
+.forEach(el=>{
+    observer.observe(el);
+});
+
+
+/* =========================================================
+   COUNTERS
+========================================================= */
+
+const counters =
+    document.querySelectorAll(
+        ".stat strong"
+    );
+
+let counterStarted=false;
+
+const counterObserver =
+    new IntersectionObserver(
+        entries=>{
+
+            if(
+                entries[0].isIntersecting &&
+                !counterStarted
+            ){
+
+                counterStarted=true;
+
+                counters.forEach(counter=>{
+
+                    const target =
+                        counter.dataset.target;
+
+                    if(target==="∞"){
+
+                        counter.textContent="∞";
+                        return;
+
+                    }
+
+                    let current=0;
+
+                    const targetNum =
+                        Number(target);
+
+                    const duration=1800;
+
+                    const start =
+                        performance.now();
+
+                    function update(time){
+
+                        const progress =
+                            Math.min(
+                                (time-start)/
+                                duration,
+                                1
+                            );
+
+                        current =
+                            Math.floor(
+                                progress*
+                                targetNum
+                            );
+
+                        counter.textContent =
+                            current;
+
+                        if(progress<1){
+                            requestAnimationFrame(update);
+                        }
+
+                    }
+
+                    requestAnimationFrame(update);
+
+                });
+
+            }
+
+        },
+        {
+            threshold:.5
+        }
+    );
+
+counterObserver.observe(
+    document.querySelector(".stats")
 );
 
 
 /* =========================================================
-   NAV SCROLL
+   MOUSE PARALLAX
 ========================================================= */
 
-const nav =
-    document.querySelector(
-        ".nav"
-    );
+document.addEventListener(
+    "mousemove",
+    e=>{
+
+        const x =
+            (e.clientX/
+             window.innerWidth-.5);
+
+        const y =
+            (e.clientY/
+             window.innerHeight-.5);
+
+        const planet =
+            document.querySelector(
+                ".planet-wrap"
+            );
+
+        if(planet){
+
+            planet.style.transform =
+                `translate(
+                    ${x*25}px,
+                    ${y*25}px
+                 )`;
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SCROLL VELOCITY
+========================================================= */
+
+let lastScroll=0;
+let scrollVelocity=0;
 
 window.addEventListener(
     "scroll",
-    () => {
+    ()=>{
 
-        if(
-            window.scrollY > 50
-        ){
+        const current =
+            window.scrollY;
 
-            nav.classList
-            .add("scrolled");
+        scrollVelocity =
+            current-lastScroll;
 
-        }else{
+        lastScroll=current;
 
-            nav.classList
-            .remove("scrolled");
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   WARP LINES
-========================================================= */
-
-const warpContainer =
-    document.getElementById(
-        "warpLines"
-    );
-
-for(
-    let i=0;
-    i<90;
-    i++
-){
-
-    const line =
-        document.createElement(
-            "div"
-        );
-
-    line.className =
-        "warp-line";
-
-    const angle =
-        Math.random()*360;
-
-    line.style.setProperty(
-        "--angle",
-        angle+"deg"
-    );
-
-    line.style.animationDelay =
-        (
-            Math.random()*2
-        )+"s";
-
-    line.style.height =
-        (
-            80+
-            Math.random()*200
-        )+"px";
-
-    warpContainer.appendChild(
-        line
-    );
-
-}
-
-
-/* =========================================================
-   CLICK COSMIC EXPLOSION
-========================================================= */
-
-document.addEventListener(
-    "click",
-    e => {
-
-        for(
-            let i=0;
-            i<20;
-            i++
-        ){
-
-            const particle =
-                document.createElement(
-                    "div"
-                );
-
-            particle.style.position =
-                "fixed";
-
-            particle.style.left =
-                e.clientX+"px";
-
-            particle.style.top =
-                e.clientY+"px";
-
-            particle.style.width =
-                "3px";
-
-            particle.style.height =
-                "3px";
-
-            particle.style.borderRadius =
-                "50%";
-
-            particle.style.background =
-                "#00eaff";
-
-            particle.style.boxShadow =
-                "0 0 10px #00eaff";
-
-            particle.style.zIndex =
-                "9998";
-
-            particle.style.pointerEvents =
-                "none";
-
-            document.body.appendChild(
-                particle
+        document.body.style
+            .setProperty(
+                "--scroll-speed",
+                Math.abs(scrollVelocity)
             );
 
-            const angle =
-                Math.random() *
-                Math.PI*2;
-
-            const distance =
-                30+
-                Math.random()*120;
-
-            const dx =
-                Math.cos(angle)*
-                distance;
-
-            const dy =
-                Math.sin(angle)*
-                distance;
-
-            particle.animate(
-                [
-                    {
-                        transform:
-                            "translate(0,0) scale(1)",
-                        opacity:1
-                    },
-                    {
-                        transform:
-                            `
-                            translate(
-                                ${dx}px,
-                                ${dy}px
-                            )
-                            scale(0)
-                            `,
-                        opacity:0
-                    }
-                ],
-                {
-                    duration:
-                        500+
-                        Math.random()*700,
-
-                    easing:
-                        "cubic-bezier(.1,.8,.2,1)"
-                }
-            );
-
-            setTimeout(
-                () =>
-                    particle.remove(),
-                1300
-            );
-
-        }
-
     }
 );
 
 
 /* =========================================================
-   MUSIC
+   RANDOM SHOOTING STARS
 ========================================================= */
 
-const music =
-    document.getElementById(
-        "music"
-    );
-
-const musicButton =
-    document.getElementById(
-        "musicButton"
-    );
-
-let playing=false;
-
-
-/*
-    Browsers normally block
-    audio autoplay until the
-    visitor interacts with
-    the page.
-*/
-
-function startMusic(){
-
-    if(playing)
-        return;
-
-    music.volume=.18;
-
-    music.play()
-    .then(
-        () => {
-
-            playing=true;
-
-        }
-    )
-    .catch(
-        () => {}
-    );
-
-}
-
-document.addEventListener(
-    "click",
-    startMusic
-);
-
-document.addEventListener(
-    "touchstart",
-    startMusic
-);
-
-document.addEventListener(
-    "keydown",
-    startMusic
-);
-
-
-musicButton.addEventListener(
-    "click",
-    e => {
-
-        e.stopPropagation();
-
-        if(
-            music.paused
-        ){
-
-            music.play();
-
-            playing=true;
-
-        }else{
-
-            music.pause();
-
-            playing=false;
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   MAGNETIC BUTTON
-========================================================= */
-
-document
-.querySelectorAll(
-    ".enter"
-)
-.forEach(
-    button => {
-
-        button.addEventListener(
-            "mousemove",
-            e => {
-
-                const rect =
-                    button.getBoundingClientRect();
-
-                const x =
-                    e.clientX -
-                    rect.left -
-                    rect.width/2;
-
-                const y =
-                    e.clientY -
-                    rect.top -
-                    rect.height/2;
-
-                button.style.transform =
-                    `
-                    translate(
-                        ${x*.18}px,
-                        ${y*.18}px
-                    )
-                    `;
-
-            }
-        );
-
-        button.addEventListener(
-            "mouseleave",
-            () => {
-
-                button.style.transform =
-                    "";
-
-            }
-        );
-
-    }
-);
-
-
-/* =========================================================
-   SMOOTH ANCHOR NAVIGATION
-========================================================= */
-
-document
-.querySelectorAll(
-    'a[href^="#"]'
-)
-.forEach(
-    link => {
-
-        link.addEventListener(
-            "click",
-            e => {
-
-                const target =
-                    document.querySelector(
-                        link.getAttribute(
-                            "href"
-                        )
-                    );
-
-                if(target){
-
-                    e.preventDefault();
-
-                    target.scrollIntoView({
-                        behavior:"smooth"
-                    });
-
-                }
-
-            }
-        );
-
-    }
-);
-
-
-/* =========================================================
-   RANDOM SHOOTING STAR
-========================================================= */
-
-function shootingStar(){
+function createShootingStar(){
 
     const star =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
-    star.style.position =
-        "fixed";
-
-    star.style.width =
-        "180px";
-
-    star.style.height =
-        "1px";
-
-    star.style.background =
-        "linear-gradient(
-            90deg,
-            transparent,
-            #fff,
-            #00eaff,
-            transparent
-        )";
-
-    star.style.left =
-        "-200px";
+    star.className="shooting";
 
     star.style.top =
-        (
-            Math.random()*60
-        )+"vh";
+        Math.random()*80+"%";
 
-    star.style.transform =
-        "rotate(-30deg)";
+    star.style.left="-20%";
 
-    star.style.zIndex =
-        "5";
+    star.style.animationDuration =
+        (2+Math.random()*4)+"s";
 
-    star.style.pointerEvents =
-        "none";
-
-    document.body.appendChild(
-        star
-    );
-
-    star.animate(
-        [
-            {
-                transform:
-                    "translate(0,0) rotate(-30deg)",
-                opacity:0
-            },
-            {
-                transform:
-                    "translate(35vw,20vh) rotate(-30deg)",
-                opacity:1
-            },
-            {
-                transform:
-                    "translate(130vw,70vh) rotate(-30deg)",
-                opacity:0
-            }
-        ],
-        {
-            duration:
-                1800,
-            easing:
-                "linear"
-        }
-    );
+    document.body.appendChild(star);
 
     setTimeout(
-        () => star.remove(),
-        1900
+        ()=>{
+            star.remove();
+        },
+        6000
     );
-
 }
 
 setInterval(
-    shootingStar,
-    4200
+    createShootingStar,
+    5000
 );
 
 
 /* =========================================================
-   AUDIO LOOP SAFETY
+   TOUCH PARALLAX
 ========================================================= */
 
-music.addEventListener(
-    "ended",
-    () => {
+document.addEventListener(
+    "touchmove",
+    e=>{
 
-        music.currentTime=0;
+        const touch =
+            e.touches[0];
 
-        music.play();
+        const x =
+            touch.clientX/
+            window.innerWidth;
 
+        const y =
+            touch.clientY/
+            window.innerHeight;
+
+        document.documentElement
+            .style.setProperty(
+                "--touchX",
+                x
+            );
+
+        document.documentElement
+            .style.setProperty(
+                "--touchY",
+                y
+            );
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+/* =========================================================
+   RANDOM CARD GLOW
+========================================================= */
+
+setInterval(
+    ()=>{
+
+        const cards =
+            document.querySelectorAll(
+                ".card"
+            );
+
+        if(!cards.length) return;
+
+        const card =
+            cards[
+                Math.floor(
+                    Math.random()*
+                    cards.length
+                )
+            ];
+
+        card.style.boxShadow =
+            "0 0 80px rgba(0,220,255,.15)";
+
+        setTimeout(
+            ()=>{
+                card.style.boxShadow="";
+            },
+            700
+        );
+
+    },
+    1800
+);
+
+
+/* =========================================================
+   PREVENT CURSOR LINK ISSUE ON MOBILE
+========================================================= */
+
+window.addEventListener(
+    "touchstart",
+    ()=>{
+        document.body.classList
+            .add("touch-device");
+    },
+    {
+        once:true
     }
 );
 
