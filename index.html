@@ -2,19 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>INTERSTELLAR — Beyond the Unknown</title>
-
-<meta name="description"
-content="An immersive interactive journey through Interstellar, space, time, gravity, wormholes and the unknown.">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>INFINITE COSMOS</title>
 
 <style>
-
-/* =========================================================
-   RESET
-========================================================= */
-
 *{
     margin:0;
     padding:0;
@@ -26,913 +17,765 @@ html{
 }
 
 body{
-    background:#02030a;
+    background:#000;
     color:#fff;
     font-family:Arial,Helvetica,sans-serif;
     overflow-x:hidden;
+    cursor:none;
 }
 
-/* =========================================================
-   CUSTOM SCROLLBAR
-========================================================= */
+/* =========================
+   SPACE CANVAS
+========================= */
 
-::-webkit-scrollbar{
-    width:7px;
-}
-
-::-webkit-scrollbar-track{
-    background:#02030a;
-}
-
-::-webkit-scrollbar-thumb{
-    background:linear-gradient(#ffffff,#777);
-    border-radius:20px;
-}
-
-/* =========================================================
-   CANVAS
-========================================================= */
-
-#spaceCanvas{
+#space{
     position:fixed;
     inset:0;
     width:100%;
     height:100%;
-    z-index:-5;
+    z-index:-10;
+    background:
+        radial-gradient(circle at 50% 50%,#10152c 0%,#03040b 45%,#000 100%);
 }
 
-/* =========================================================
-   FILM GRAIN
-========================================================= */
+/* =========================
+   NEBULA
+========================= */
 
-.grain{
+.nebula{
+    position:fixed;
+    width:70vw;
+    height:70vw;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.16;
+    pointer-events:none;
+    z-index:-8;
+    animation:nebulaFloat 18s ease-in-out infinite alternate;
+}
+
+.n1{
+    background:radial-gradient(circle,#684cff,transparent 65%);
+    top:-25%;
+    left:-15%;
+}
+
+.n2{
+    background:radial-gradient(circle,#00c8ff,transparent 65%);
+    right:-20%;
+    top:20%;
+    animation-delay:-5s;
+}
+
+.n3{
+    background:radial-gradient(circle,#ff278f,transparent 65%);
+    bottom:-30%;
+    left:20%;
+    animation-delay:-10s;
+}
+
+@keyframes nebulaFloat{
+    from{transform:translate3d(-5%,-4%,0) scale(1)}
+    to{transform:translate3d(8%,7%,0) scale(1.25)}
+}
+
+/* =========================
+   STAR LAYERS
+========================= */
+
+.stars{
     position:fixed;
     inset:0;
     pointer-events:none;
-    z-index:50;
-    opacity:.07;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+    z-index:-7;
 }
 
-/* =========================================================
-   NAVBAR
-========================================================= */
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:#fff;
+    border-radius:50%;
+    box-shadow:0 0 8px #fff;
+    animation:twinkle var(--t) ease-in-out infinite;
+}
 
-.nav{
+@keyframes twinkle{
+    0%,100%{
+        opacity:.15;
+        transform:scale(.5);
+    }
+    50%{
+        opacity:1;
+        transform:scale(1.8);
+    }
+}
+
+/* =========================
+   SHOOTING STARS
+========================= */
+
+.shooting{
     position:fixed;
-    top:18px;
+    width:160px;
+    height:2px;
+    background:linear-gradient(90deg,transparent,#fff);
+    transform:rotate(-35deg);
+    opacity:0;
+    z-index:-4;
+    animation:shoot 7s linear infinite;
+}
+
+.s1{top:15%;left:-20%;animation-delay:1s}
+.s2{top:40%;left:-30%;animation-delay:4s}
+.s3{top:65%;left:-20%;animation-delay:7s}
+
+@keyframes shoot{
+    0%{
+        transform:translate(0,0) rotate(-35deg);
+        opacity:0;
+    }
+    5%{opacity:1}
+    20%{
+        transform:translate(130vw,70vh) rotate(-35deg);
+        opacity:0;
+    }
+    100%{opacity:0}
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+nav{
+    position:fixed;
+    top:20px;
     left:50%;
     transform:translateX(-50%);
-    width:min(94%,1100px);
-    padding:12px 18px;
-    border:1px solid rgba(255,255,255,.12);
+    width:min(94%,1000px);
+    padding:14px 22px;
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    border:1px solid rgba(255,255,255,.15);
     border-radius:50px;
     background:rgba(0,0,0,.35);
-    backdrop-filter:blur(15px);
-    z-index:100;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    backdrop-filter:blur(18px);
+    box-shadow:0 0 30px rgba(0,180,255,.12);
+    z-index:1000;
 }
 
-.logo{
-    font-size:15px;
-    letter-spacing:4px;
-    font-weight:bold;
-}
-
-.navlinks{
-    display:flex;
-    gap:20px;
-}
-
-.navlinks a{
-    color:#aaa;
+nav a{
+    color:#ddd;
     text-decoration:none;
-    font-size:11px;
+    font-size:13px;
     letter-spacing:2px;
     transition:.3s;
 }
 
-.navlinks a:hover{
-    color:white;
+nav a:hover{
+    color:#fff;
+    text-shadow:0 0 15px #00d9ff;
 }
 
-.music-btn{
-    border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.05);
-    color:white;
-    border-radius:50%;
-    width:38px;
-    height:38px;
-    cursor:pointer;
-    font-size:15px;
-}
-
-/* =========================================================
-   GENERAL
-========================================================= */
+/* =========================
+   SECTIONS
+========================= */
 
 section{
-    position:relative;
     min-height:100vh;
-    padding:120px 7%;
+    padding:120px 8%;
     display:flex;
     flex-direction:column;
     justify-content:center;
+    position:relative;
 }
-
-.eyebrow{
-    color:#aaa;
-    letter-spacing:5px;
-    font-size:11px;
-    margin-bottom:20px;
-}
-
-h2{
-    font-size:clamp(40px,7vw,90px);
-    line-height:.95;
-    letter-spacing:-4px;
-}
-
-p{
-    color:#aaa;
-    line-height:1.8;
-    max-width:700px;
-}
-
-/* =========================================================
-   HERO
-========================================================= */
 
 .hero{
     text-align:center;
     align-items:center;
-    overflow:hidden;
 }
 
-.hero::before{
-    content:"";
-    position:absolute;
-    width:500px;
-    height:500px;
-    border-radius:50%;
-    background:radial-gradient(
-        circle,
-        rgba(255,255,255,.08),
-        transparent 65%
-    );
-    filter:blur(30px);
+.hero h1{
+    font-size:clamp(55px,12vw,160px);
+    letter-spacing:15px;
+    font-weight:800;
+    background:linear-gradient(90deg,#fff,#72ddff,#a878ff,#fff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    color:transparent;
+    animation:titleFlow 7s linear infinite;
 }
 
-.hero-title{
-    position:relative;
-    z-index:2;
-    font-size:clamp(70px,15vw,190px);
-    line-height:.75;
-    letter-spacing:-9px;
-    font-weight:900;
-    text-transform:uppercase;
-    text-shadow:
-        0 0 20px rgba(255,255,255,.15),
-        0 0 70px rgba(255,255,255,.08);
+@keyframes titleFlow{
+    to{background-position:300%}
 }
 
-.hero-sub{
-    margin-top:35px;
-    color:#aaa;
-    letter-spacing:7px;
-    font-size:12px;
+.hero p{
+    margin-top:25px;
+    max-width:750px;
+    color:#aeb8ca;
+    font-size:18px;
+    line-height:1.8;
+    letter-spacing:2px;
 }
 
 .scroll{
-    position:absolute;
-    bottom:30px;
-    font-size:10px;
-    letter-spacing:4px;
-    color:#777;
-    animation:float 2s infinite;
+    margin-top:70px;
+    padding:12px 25px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:50px;
+    color:#aaa;
+    animation:breathe 2s infinite;
 }
 
-@keyframes float{
-    50%{transform:translateY(10px);}
-}
-
-/* =========================================================
-   BLACK HOLE
-========================================================= */
-
-.blackhole-section{
-    align-items:center;
-    text-align:center;
-}
-
-.blackhole{
-    width:min(75vw,500px);
-    aspect-ratio:1;
-    border-radius:50%;
-    position:relative;
-    margin:50px auto;
-    background:
-        radial-gradient(
-            circle,
-            #000 0 27%,
-            transparent 28%
-        ),
-        conic-gradient(
-            from 0deg,
-            #fff,
-            #5e5e5e,
-            #eee,
-            #333,
-            #fff
-        );
-    filter:
-        drop-shadow(0 0 35px rgba(255,255,255,.3))
-        blur(.2px);
-    animation:spin 12s linear infinite;
-}
-
-.blackhole::before{
-    content:"";
-    position:absolute;
-    inset:-25px;
-    border-radius:50%;
-    border:2px solid rgba(255,255,255,.18);
-    box-shadow:
-        0 0 50px rgba(255,255,255,.2),
-        inset 0 0 40px rgba(255,255,255,.15);
-}
-
-.blackhole::after{
-    content:"";
-    position:absolute;
-    inset:20%;
-    border-radius:50%;
-    background:#000;
-    box-shadow:0 0 80px 30px #000;
-}
-
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
+@keyframes breathe{
+    50%{
+        transform:translateY(10px);
+        box-shadow:0 0 30px rgba(0,210,255,.3);
     }
 }
 
-/* =========================================================
-   INFO GRID
-========================================================= */
+/* =========================
+   CONTENT
+========================= */
 
-.grid{
-    margin-top:60px;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:18px;
+.content{
+    max-width:1100px;
+    margin:auto;
+    width:100%;
 }
 
-.card{
-    padding:30px;
-    min-height:220px;
-    border:1px solid rgba(255,255,255,.1);
-    background:rgba(255,255,255,.025);
-    backdrop-filter:blur(12px);
-    transition:.5s;
-}
-
-.card:hover{
-    transform:translateY(-10px);
-    background:rgba(255,255,255,.07);
-    border-color:rgba(255,255,255,.3);
-}
-
-.card-number{
-    font-size:12px;
-    color:#777;
-    letter-spacing:3px;
-}
-
-.card h3{
-    margin:35px 0 15px;
-    font-size:25px;
-}
-
-.card p{
+.tag{
+    color:#00d9ff;
+    letter-spacing:5px;
     font-size:13px;
+    margin-bottom:15px;
 }
 
-/* =========================================================
-   TIMELINE
-========================================================= */
-
-.timeline{
-    margin-top:70px;
-    position:relative;
-    border-left:1px solid #444;
+h2{
+    font-size:clamp(40px,7vw,90px);
+    margin-bottom:25px;
 }
 
-.timeline-item{
-    position:relative;
-    padding:0 0 70px 45px;
+.text{
+    color:#aeb8ca;
+    font-size:18px;
+    line-height:1.9;
+    max-width:850px;
 }
 
-.timeline-item::before{
-    content:"";
+/* =========================
+   PLANETS
+========================= */
+
+.planet-system{
     position:absolute;
-    left:-5px;
-    top:5px;
-    width:9px;
-    height:9px;
-    background:white;
+    right:5%;
+    width:420px;
+    height:420px;
     border-radius:50%;
-    box-shadow:0 0 20px white;
+    border:1px solid rgba(255,255,255,.08);
+    animation:orbitSystem 30s linear infinite;
 }
 
-.timeline-year{
-    color:#777;
-    letter-spacing:4px;
-    font-size:12px;
+@keyframes orbitSystem{
+    to{transform:rotate(360deg)}
 }
 
-.timeline h3{
-    margin:12px 0;
-    font-size:28px;
+.planet{
+    position:absolute;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    top:-35px;
+    left:175px;
+    background:
+        radial-gradient(circle at 30% 30%,#fff,#4b8dff 30%,#142052 70%);
+    box-shadow:
+        0 0 30px #3f76ff,
+        inset -20px -15px 30px rgba(0,0,0,.8);
 }
 
-/* =========================================================
+.ring{
+    position:absolute;
+    inset:25px -25px;
+    border:2px solid rgba(100,190,255,.5);
+    border-radius:50%;
+    transform:rotate(25deg);
+}
+
+/* =========================
+   BLACK HOLE
+========================= */
+
+.blackhole{
+    width:330px;
+    height:330px;
+    margin:50px auto;
+    position:relative;
+    display:grid;
+    place-items:center;
+}
+
+.disk{
+    position:absolute;
+    width:330px;
+    height:120px;
+    border-radius:50%;
+    background:
+        radial-gradient(ellipse,#fff 0%,#ffdb67 8%,#ff6a00 25%,#7c20ff 50%,transparent 70%);
+    filter:blur(5px);
+    transform:rotate(-18deg);
+    animation:diskSpin 2s linear infinite;
+}
+
+@keyframes diskSpin{
+    to{transform:rotate(342deg)}
+}
+
+.hole{
+    width:145px;
+    height:145px;
+    border-radius:50%;
+    background:#000;
+    box-shadow:
+        0 0 50px #000,
+        0 0 80px rgba(255,100,0,.5);
+    z-index:2;
+}
+
+/* =========================
    WORMHOLE
-========================================================= */
-
-.wormhole-section{
-    align-items:center;
-    text-align:center;
-}
+========================= */
 
 .wormhole{
-    width:min(80vw,500px);
-    height:min(80vw,500px);
+    width:min(80vw,600px);
+    aspect-ratio:1;
+    margin:50px auto;
     border-radius:50%;
-    margin:60px auto;
+    position:relative;
+    overflow:hidden;
     background:
         repeating-radial-gradient(
-            ellipse,
-            transparent 0 10px,
-            rgba(255,255,255,.15) 11px 13px
+            circle,
+            transparent 0 20px,
+            rgba(100,200,255,.15) 22px 25px
         );
-    transform:perspective(600px) rotateX(65deg);
-    animation:worm 8s linear infinite;
+    animation:worm 4s linear infinite;
     box-shadow:
-        0 0 60px rgba(255,255,255,.15),
-        inset 0 0 100px #000;
+        0 0 60px #4820ff,
+        inset 0 0 80px #00cfff;
 }
 
 @keyframes worm{
     to{
-        transform:
-            perspective(600px)
-            rotateX(65deg)
-            rotateZ(360deg);
+        transform:rotate(360deg) scale(1.05);
     }
 }
 
-/* =========================================================
-   PLANETS
-========================================================= */
+/* =========================
+   INFINITE GRID
+========================= */
 
-.planets{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:40px;
-    margin-top:60px;
-}
-
-.planet{
-    height:330px;
-    position:relative;
+.grid{
+    position:absolute;
+    inset:auto 0 0;
+    height:45%;
+    perspective:400px;
     overflow:hidden;
-    border:1px solid rgba(255,255,255,.1);
+    opacity:.25;
 }
 
-.planet-ball{
-    width:220px;
-    height:220px;
-    border-radius:50%;
+.grid::before{
+    content:"";
     position:absolute;
-    left:50%;
-    top:35%;
-    transform:translate(-50%,-50%);
-    transition:.5s;
-}
-
-.planet:hover .planet-ball{
-    transform:translate(-50%,-50%) scale(1.12);
-}
-
-.water{
+    inset:-100% 0 0;
     background:
-        radial-gradient(circle at 35% 30%,#aaa,transparent 4%),
-        radial-gradient(circle at 65% 60%,#444,transparent 7%),
-        linear-gradient(130deg,#eee,#333,#111);
-    box-shadow:0 0 80px rgba(255,255,255,.2);
-}
-
-.ice{
-    background:
-        radial-gradient(circle at 30% 30%,white,transparent 5%),
-        linear-gradient(135deg,#eee,#777,#222);
-    box-shadow:0 0 80px rgba(255,255,255,.25);
-}
-
-.edmund{
-    background:
-        radial-gradient(circle at 40% 30%,#aaa,transparent 5%),
-        linear-gradient(130deg,#777,#222,#050505);
-    box-shadow:0 0 70px rgba(255,255,255,.15);
-}
-
-.planet-info{
-    position:absolute;
-    bottom:0;
-    width:100%;
-    padding:25px;
-    background:linear-gradient(transparent,#000);
-}
-
-.planet-info h3{
-    font-size:25px;
-}
-
-/* =========================================================
-   SCIENCE
-========================================================= */
-
-.science{
-    background:
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,.02) 1px,
-            transparent 1px
-        );
+        linear-gradient(rgba(0,200,255,.4) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,200,255,.4) 1px,transparent 1px);
     background-size:50px 50px;
+    transform:rotateX(60deg);
+    animation:gridMove 2s linear infinite;
 }
 
-.equation{
-    margin:60px 0;
-    padding:30px;
-    border-top:1px solid #333;
-    border-bottom:1px solid #333;
-    text-align:center;
-    font-family:Georgia,serif;
-    font-size:clamp(20px,4vw,42px);
-    letter-spacing:4px;
+@keyframes gridMove{
+    to{transform:rotateX(60deg) translateY(50px)}
 }
 
-/* =========================================================
-   PUZZLE
-========================================================= */
+/* =========================
+   CARDS
+========================= */
 
-.puzzle{
-    max-width:700px;
-    margin:60px auto;
-    padding:40px;
-    border:1px solid rgba(255,255,255,.15);
-    background:rgba(255,255,255,.03);
-    text-align:center;
-}
-
-.puzzle h3{
-    font-size:30px;
-    margin-bottom:20px;
-}
-
-.code{
-    font-size:25px;
-    letter-spacing:10px;
-    margin:30px 0;
-}
-
-.puzzle input{
-    width:100%;
-    padding:15px;
-    background:#050505;
-    border:1px solid #444;
-    color:white;
-    outline:none;
-    text-align:center;
-}
-
-.puzzle button{
-    margin-top:15px;
-    padding:14px 30px;
-    background:white;
-    color:black;
-    border:0;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-#result{
-    margin-top:20px;
-    min-height:25px;
-}
-
-/* =========================================================
-   QUOTE
-========================================================= */
-
-.quote{
-    min-height:70vh;
-    text-align:center;
-    align-items:center;
-}
-
-.quote-text{
-    max-width:900px;
-    font-family:Georgia,serif;
-    font-size:clamp(30px,6vw,70px);
-    line-height:1.1;
-    font-style:italic;
-}
-
-.quote-author{
-    margin-top:30px;
-    color:#666;
-    letter-spacing:4px;
-}
-
-/* =========================================================
-   CREW
-========================================================= */
-
-.crew{
-    margin-top:60px;
+.cards{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:15px;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+    margin-top:50px;
 }
 
-.person{
-    padding:25px;
-    border:1px solid #222;
+.card{
+    min-height:220px;
+    padding:30px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.035);
+    backdrop-filter:blur(10px);
+    border-radius:25px;
+    transition:.5s;
+    transform-style:preserve-3d;
 }
 
-.person span{
-    display:block;
-    color:#666;
-    font-size:11px;
-    margin-top:8px;
+.card:hover{
+    transform:translateY(-12px) rotateX(5deg) rotateY(-5deg);
+    border-color:#00d9ff;
+    box-shadow:0 20px 60px rgba(0,210,255,.12);
 }
 
-/* =========================================================
+.card h3{
+    margin-bottom:15px;
+    color:#fff;
+}
+
+.card p{
+    color:#929caf;
+    line-height:1.7;
+}
+
+/* =========================
+   COUNTER
+========================= */
+
+.counter{
+    font-size:clamp(50px,10vw,120px);
+    font-weight:bold;
+    background:linear-gradient(90deg,#00d9ff,#fff,#8d5cff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+/* =========================
+   CURSOR
+========================= */
+
+.cursor{
+    position:fixed;
+    width:25px;
+    height:25px;
+    border:1px solid #fff;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:difference;
+}
+
+.cursor::before{
+    content:"";
+    position:absolute;
+    width:4px;
+    height:4px;
+    background:#fff;
+    border-radius:50%;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+}
+
+.cursor-label{
+    position:fixed;
+    pointer-events:none;
+    z-index:9998;
+    font-size:8px;
+    letter-spacing:2px;
+    color:#fff;
+    transform:translate(18px,10px);
+    opacity:.7;
+}
+
+.trail{
+    position:fixed;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#5eeaff;
+    pointer-events:none;
+    z-index:9997;
+    box-shadow:0 0 15px #00d9ff;
+}
+
+/* =========================
+   FLOATING OBJECTS
+========================= */
+
+.float{
+    position:absolute;
+    border-radius:50%;
+    pointer-events:none;
+    opacity:.7;
+}
+
+.f1{
+    width:8px;
+    height:8px;
+    background:#00d9ff;
+    top:20%;
+    left:10%;
+    box-shadow:0 0 25px #00d9ff;
+    animation:float1 8s ease-in-out infinite;
+}
+
+.f2{
+    width:5px;
+    height:5px;
+    background:#fff;
+    top:70%;
+    right:15%;
+    box-shadow:0 0 20px #fff;
+    animation:float1 11s ease-in-out infinite reverse;
+}
+
+@keyframes float1{
+    0%,100%{transform:translate(0,0)}
+    50%{transform:translate(100px,-80px)}
+}
+
+/* =========================
    FOOTER
-========================================================= */
+========================= */
 
 footer{
-    min-height:70vh;
+    min-height:40vh;
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
-    position:relative;
-    overflow:hidden;
-}
-
-.footer-title{
-    font-size:clamp(60px,13vw,160px);
-    font-weight:900;
-    letter-spacing:-8px;
-}
-
-.footer-small{
     color:#666;
-    letter-spacing:4px;
-    margin-top:25px;
+    letter-spacing:3px;
+    padding:50px;
 }
 
-/* =========================================================
-   REVEAL ANIMATION
-========================================================= */
+/* =========================
+   REVEAL
+========================= */
 
 .reveal{
     opacity:0;
-    transform:translateY(60px);
+    transform:translateY(70px);
     transition:1s ease;
 }
 
-.reveal.active{
+.reveal.show{
     opacity:1;
     transform:translateY(0);
 }
 
-/* =========================================================
+/* =========================
    MOBILE
-========================================================= */
+========================= */
 
 @media(max-width:700px){
 
-    .nav{
-        top:10px;
-        padding:10px 12px;
+    body{
+        cursor:auto;
     }
 
-    .navlinks{
-        display:none;
+    nav{
+        gap:12px;
+        padding:12px;
+        overflow-x:auto;
+        justify-content:flex-start;
     }
 
-    .hero-title{
-        letter-spacing:-5px;
+    nav a{
+        font-size:9px;
+        white-space:nowrap;
     }
 
     section{
-        padding:100px 6%;
+        padding:110px 6%;
     }
 
-    h2{
-        letter-spacing:-2px;
+    .planet-system{
+        position:relative;
+        right:auto;
+        width:280px;
+        height:280px;
+        margin:50px auto 0;
     }
 
-    .card{
-        min-height:auto;
+    .planet{
+        width:50px;
+        height:50px;
+        top:-25px;
+        left:115px;
     }
 
-    .blackhole{
-        width:75vw;
+    .hero h1{
+        letter-spacing:7px;
     }
 
-    .wormhole{
-        width:75vw;
-        height:75vw;
+    .hero p{
+        font-size:14px;
+    }
+
+    .cursor,
+    .cursor-label,
+    .trail{
+        display:none;
     }
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- =====================================================
-     BACKGROUND
-===================================================== -->
+<!-- =========================
+     SPACE BACKGROUND
+========================= -->
 
-<canvas id="spaceCanvas"></canvas>
+<canvas id="space"></canvas>
 
-<div class="grain"></div>
+<div class="nebula n1"></div>
+<div class="nebula n2"></div>
+<div class="nebula n3"></div>
 
-<!-- =====================================================
+<div class="stars" id="stars"></div>
+
+<div class="shooting s1"></div>
+<div class="shooting s2"></div>
+<div class="shooting s3"></div>
+
+<div class="float f1"></div>
+<div class="float f2"></div>
+
+<!-- =========================
+     CURSOR
+========================= -->
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-label">EXPLORER</div>
+
+<!-- =========================
      NAV
-===================================================== -->
+========================= -->
 
-<nav class="nav">
-
-    <div class="logo">INTERSTELLAR</div>
-
-    <div class="navlinks">
-        <a href="#story">STORY</a>
-        <a href="#science">SCIENCE</a>
-        <a href="#planets">WORLDS</a>
-        <a href="#puzzle">PUZZLE</a>
-    </div>
-
-    <button class="music-btn" id="musicBtn">♫</button>
-
+<nav>
+    <a href="#home">HOME</a>
+    <a href="#universe">UNIVERSE</a>
+    <a href="#planets">PLANETS</a>
+    <a href="#blackhole">BLACK HOLE</a>
+    <a href="#wormhole">WORMHOLE</a>
+    <a href="#future">FUTURE</a>
 </nav>
 
-<!-- =====================================================
-     MUSIC
-===================================================== -->
-
-<audio id="music" loop>
-    <source src="Interstellar Main Theme - Hans Zimmer (1).mp3" type="audio/mpeg">
-</audio>
-
-<!-- =====================================================
+<!-- =========================
      HERO
-===================================================== -->
+========================= -->
 
-<section class="hero">
+<section class="hero" id="home">
 
-    <div class="eyebrow">A JOURNEY BEYOND SPACE & TIME</div>
+    <div class="content">
 
-    <h1 class="hero-title">
-        INTER<br>
-        STELLAR
-    </h1>
+        <div class="tag">MISSION // 001</div>
 
-    <div class="hero-sub">
-        LOVE • TIME • GRAVITY • HUMANITY
-    </div>
+        <h1>INFINITE</h1>
 
-    <div class="scroll">
-        ↓ SCROLL INTO THE UNKNOWN ↓
-    </div>
+        <p>
+            Beyond stars. Beyond time. Beyond imagination.
+            Enter a continuously evolving digital universe.
+        </p>
 
-</section>
-
-<!-- =====================================================
-     STORY
-===================================================== -->
-
-<section id="story">
-
-    <div class="eyebrow reveal">01 / THE STORY</div>
-
-    <h2 class="reveal">
-        WE ARE<br>
-        EXPLORERS.
-    </h2>
-
-    <p class="reveal" style="margin-top:35px;">
-        In a future where Earth is becoming increasingly difficult
-        to inhabit, former NASA pilot Cooper is drawn into a mission
-        that could determine the future of humanity.
-    </p>
-
-    <div class="grid">
-
-        <div class="card reveal">
-            <div class="card-number">01</div>
-            <h3>Earth</h3>
-            <p>
-                Humanity faces environmental collapse and an uncertain
-                future.
-            </p>
-        </div>
-
-        <div class="card reveal">
-            <div class="card-number">02</div>
-            <h3>The Mission</h3>
-            <p>
-                Cooper joins a journey through a mysterious wormhole
-                searching for another home.
-            </p>
-        </div>
-
-        <div class="card reveal">
-            <div class="card-number">03</div>
-            <h3>The Unknown</h3>
-            <p>
-                The crew encounters strange worlds, extreme gravity
-                and consequences of relativistic time.
-            </p>
+        <div class="scroll">
+            ↓ SCROLL TO EXPLORE ↓
         </div>
 
     </div>
 
-</section>
-
-<!-- =====================================================
-     BLACK HOLE
-===================================================== -->
-
-<section class="blackhole-section">
-
-    <div class="eyebrow reveal">02 / GARGANTUA</div>
-
-    <h2 class="reveal">
-        ENTER<br>
-        THE DARKNESS.
-    </h2>
-
-    <div class="blackhole reveal"></div>
-
-    <p class="reveal">
-        Gargantua is the enormous rotating black hole encountered
-        by the Endurance mission. Its immense gravity dramatically
-        affects the passage of time near it.
-    </p>
+    <div class="grid"></div>
 
 </section>
 
-<!-- =====================================================
-     TIMELINE
-===================================================== -->
+<!-- =========================
+     UNIVERSE
+========================= -->
 
-<section>
+<section id="universe">
 
-    <div class="eyebrow reveal">03 / MISSION LOG</div>
+    <div class="content reveal">
 
-    <h2 class="reveal">
-        THROUGH<br>
-        SPACE & TIME.
-    </h2>
+        <div class="tag">THE COSMOS</div>
 
-    <div class="timeline">
+        <h2>THE UNIVERSE</h2>
 
-        <div class="timeline-item reveal">
-            <div class="timeline-year">EARTH</div>
-            <h3>The Beginning</h3>
-            <p>
-                Cooper lives as a farmer while humanity struggles
-                with environmental problems.
-            </p>
-        </div>
+        <p class="text">
+            The universe contains everything that exists:
+            space, time, matter, energy, galaxies, stars,
+            planets, black holes and phenomena that we are
+            still learning to understand.
+        </p>
 
-        <div class="timeline-item reveal">
-            <div class="timeline-year">NASA</div>
-            <h3>The Signal</h3>
-            <p>
-                A mysterious gravitational anomaly leads Cooper
-                to a secret NASA facility.
-            </p>
-        </div>
+        <div class="cards">
 
-        <div class="timeline-item reveal">
-            <div class="timeline-year">SATURN</div>
-            <h3>The Wormhole</h3>
-            <p>
-                A wormhole provides a possible path toward distant
-                star systems.
-            </p>
-        </div>
+            <div class="card">
+                <h3>🌌 Galaxies</h3>
+                <p>
+                    Vast structures containing millions,
+                    billions or even trillions of stars.
+                </p>
+            </div>
 
-        <div class="timeline-item reveal">
-            <div class="timeline-year">UNKNOWN</div>
-            <h3>The Journey</h3>
-            <p>
-                The crew explores planets where time behaves very
-                differently from Earth.
-            </p>
+            <div class="card">
+                <h3>⭐ Stars</h3>
+                <p>
+                    Giant spheres of plasma powered by
+                    nuclear fusion deep within their cores.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>🌑 Dark Matter</h3>
+                <p>
+                    Invisible matter whose presence is
+                    inferred from its gravitational effects.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>⚡ Dark Energy</h3>
+                <p>
+                    A mysterious component associated with
+                    the accelerating expansion of the universe.
+                </p>
+            </div>
+
         </div>
 
     </div>
 
 </section>
 
-<!-- =====================================================
-     WORMHOLE
-===================================================== -->
-
-<section class="wormhole-section">
-
-    <div class="eyebrow reveal">04 / THE WORMHOLE</div>
-
-    <h2 class="reveal">
-        A BRIDGE<br>
-        THROUGH SPACE.
-    </h2>
-
-    <div class="wormhole reveal"></div>
-
-    <p class="reveal">
-        A wormhole can be imagined as a shortcut connecting distant
-        regions of spacetime. In the movie, it allows the crew to
-        reach another region of the universe.
-    </p>
-
-</section>
-
-<!-- =====================================================
+<!-- =========================
      PLANETS
-===================================================== -->
+========================= -->
 
 <section id="planets">
 
-    <div class="eyebrow reveal">05 / UNKNOWN WORLDS</div>
+    <div class="content reveal">
 
-    <h2 class="reveal">
-        THREE<br>
-        WORLDS.
-    </h2>
+        <div class="tag">ORBITAL SYSTEM</div>
 
-    <div class="planets">
+        <h2>WORLDS</h2>
 
-        <div class="planet reveal">
+        <p class="text">
+            Planets are worlds shaped by gravity, chemistry,
+            geology and their environments. Some orbit stars;
+            others may travel through space without a parent star.
+        </p>
 
-            <div class="planet-ball water"></div>
+        <div class="planet-system">
 
-            <div class="planet-info">
-                <h3>Miller's Planet</h3>
-                <p>
-                    A world covered largely by shallow water and
-                    dominated by enormous tidal waves.
-                </p>
-            </div>
-
-        </div>
-
-        <div class="planet reveal">
-
-            <div class="planet-ball ice"></div>
-
-            <div class="planet-info">
-                <h3>Dr. Mann's Planet</h3>
-                <p>
-                    A frozen world where the mission encounters
-                    Dr. Mann.
-                </p>
-            </div>
-
-        </div>
-
-        <div class="planet reveal">
-
-            <div class="planet-ball edmund"></div>
-
-            <div class="planet-info">
-                <h3>Edmunds' Planet</h3>
-                <p>
-                    A potentially habitable world connected to
-                    the future of humanity.
-                </p>
+            <div class="planet">
+                <div class="ring"></div>
             </div>
 
         </div>
@@ -941,541 +784,697 @@ footer{
 
 </section>
 
-<!-- =====================================================
-     SCIENCE
-===================================================== -->
+<!-- =========================
+     BLACK HOLE
+========================= -->
 
-<section id="science" class="science">
+<section id="blackhole">
 
-    <div class="eyebrow reveal">06 / THE SCIENCE</div>
+    <div class="content reveal">
 
-    <h2 class="reveal">
-        GRAVITY<br>
-        IS EVERYTHING.
-    </h2>
+        <div class="tag">EXTREME GRAVITY</div>
 
-    <p class="reveal" style="margin-top:35px;">
-        Interstellar explores ideas from relativity, gravitational
-        physics, black holes, wormholes and time dilation.
-    </p>
+        <h2>BLACK HOLE</h2>
 
-    <div class="equation reveal">
-        E = mc²
-    </div>
+        <p class="text">
+            A black hole is a region of spacetime where gravity
+            becomes so strong that escaping from inside its
+            event horizon is impossible.
+        </p>
 
-    <div class="grid">
+        <div class="blackhole">
 
-        <div class="card reveal">
-            <div class="card-number">RELATIVITY</div>
-            <h3>Time Dilation</h3>
-            <p>
-                Clocks can run at different rates depending on
-                relative motion and gravitational fields.
-            </p>
-        </div>
+            <div class="disk"></div>
 
-        <div class="card reveal">
-            <div class="card-number">GRAVITY</div>
-            <h3>Curved Spacetime</h3>
-            <p>
-                Massive objects affect the geometry of spacetime,
-                producing what we experience as gravity.
-            </p>
-        </div>
+            <div class="hole"></div>
 
-        <div class="card reveal">
-            <div class="card-number">BLACK HOLE</div>
-            <h3>Event Horizon</h3>
-            <p>
-                The event horizon is the boundary beyond which
-                signals cannot escape a black hole.
-            </p>
         </div>
 
     </div>
 
 </section>
 
-<!-- =====================================================
-     PUZZLE
-===================================================== -->
+<!-- =========================
+     WORMHOLE
+========================= -->
 
-<section id="puzzle">
+<section id="wormhole">
 
-    <div class="eyebrow reveal">07 / INTERSTELLAR PUZZLE</div>
+    <div class="content reveal">
 
-    <h2 class="reveal">
-        CAN YOU<br>
-        SOLVE IT?
-    </h2>
+        <div class="tag">SPACETIME</div>
 
-    <div class="puzzle reveal">
+        <h2>WORMHOLE</h2>
 
-        <h3>MISSION CODE</h3>
-
-        <p>
-            Cooper receives a mysterious sequence:
+        <p class="text">
+            Wormholes are hypothetical structures in spacetime
+            that are often imagined as shortcuts between distant
+            regions of the universe.
         </p>
 
-        <div class="code">
-            20 — 9 — 13 — 5
-        </div>
-
-        <p>
-            Convert each number into its corresponding
-            English alphabet letter.
-        </p>
-
-        <input
-            id="answer"
-            type="text"
-            placeholder="ENTER THE WORD"
-        >
-
-        <button onclick="solvePuzzle()">
-            TRANSMIT
-        </button>
-
-        <div id="result"></div>
-
-    </div>
-
-    <div class="card reveal" style="max-width:700px;margin:auto;">
-
-        <h3>How to solve</h3>
-
-        <p>
-            Use A=1, B=2, C=3 ... Z=26.
-            Therefore:
-            20=T, 9=I, 13=M, 5=E.
-            The hidden word is TIME.
-        </p>
+        <div class="wormhole"></div>
 
     </div>
 
 </section>
 
-<!-- =====================================================
-     CREW
-===================================================== -->
+<!-- =========================
+     TIME
+========================= -->
 
 <section>
 
-    <div class="eyebrow reveal">08 / THE CREW</div>
+    <div class="content reveal">
 
-    <h2 class="reveal">
-        THE PEOPLE<br>
-        WHO WENT.
-    </h2>
+        <div class="tag">THE FOURTH DIMENSION</div>
 
-    <div class="crew">
+        <h2>TIME</h2>
 
-        <div class="person reveal">
-            <h3>Cooper</h3>
-            <span>Matthew McConaughey</span>
-        </div>
+        <p class="text">
+            Space and time are connected into spacetime.
+            Relativity shows that measurements of time and
+            distance depend on motion and gravity.
+        </p>
 
-        <div class="person reveal">
-            <h3>Amelia Brand</h3>
-            <span>Anne Hathaway</span>
-        </div>
-
-        <div class="person reveal">
-            <h3>Murph</h3>
-            <span>Jessica Chastain / Mackenzie Foy</span>
-        </div>
-
-        <div class="person reveal">
-            <h3>Dr. Mann</h3>
-            <span>Matt Damon</span>
-        </div>
-
-        <div class="person reveal">
-            <h3>Professor Brand</h3>
-            <span>Michael Caine</span>
-        </div>
-
-        <div class="person reveal">
-            <h3>Romilly</h3>
-            <span>David Gyasi</span>
+        <div style="text-align:center;margin-top:50px">
+            <div class="counter" id="counter">0</div>
+            <p class="text" style="margin:auto">
+                YEARS OF COSMIC HISTORY
+            </p>
         </div>
 
     </div>
 
 </section>
 
-<!-- =====================================================
-     QUOTE
-===================================================== -->
+<!-- =========================
+     FUTURE
+========================= -->
 
-<section class="quote">
+<section id="future">
 
-    <div class="eyebrow reveal">09 / THE HUMAN ELEMENT</div>
+    <div class="content reveal">
 
-    <div class="quote-text reveal">
-        “We are not meant to save ourselves.
-        We are meant to save each other.”
-    </div>
+        <div class="tag">MISSION // FUTURE</div>
 
-    <div class="quote-author reveal">
-        — INTERSTELLAR
+        <h2>BEYOND</h2>
+
+        <p class="text">
+            Humanity continues to explore questions about
+            life, planets, stars, gravity, spacetime and the
+            possibility of travelling farther into the cosmos.
+        </p>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>🚀 Exploration</h3>
+                <p>
+                    Discovering worlds beyond Earth and learning
+                    how planetary systems form and evolve.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>🔭 Observation</h3>
+                <p>
+                    Telescopes allow us to study objects billions
+                    of light-years away.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>🧠 Science</h3>
+                <p>
+                    New discoveries continually change our
+                    understanding of the universe.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>♾️ Infinity</h3>
+                <p>
+                    The cosmos still contains questions that
+                    humanity has not answered.
+                </p>
+            </div>
+
+        </div>
+
     </div>
 
 </section>
-
-<!-- =====================================================
-     FINAL
-===================================================== -->
 
 <footer>
-
     <div>
-
-        <div class="eyebrow">
-            10 / END OF TRANSMISSION
-        </div>
-
-        <div class="footer-title">
-            STAY<br>
-            CURIOUS.
-        </div>
-
-        <div class="footer-small">
-            LOOK UP • LOOK BEYOND • KEEP EXPLORING
-        </div>
-
+        <p>INFINITE COSMOS</p>
+        <br>
+        <small>EXPLORE • DISCOVER • IMAGINE</small>
     </div>
-
 </footer>
+
+<!-- =========================
+     INVISIBLE MUSIC
+========================= -->
+
+<audio id="spaceMusic"
+       src="Interstellar Main Theme - Hans Zimmer (1).mp3"
+       loop
+       preload="auto">
+</audio>
 
 <script>
 
-/* =========================================================
-   MUSIC
-========================================================= */
+/* =====================================================
+   STAR GENERATOR
+===================================================== */
 
-const music = document.getElementById("music");
-const musicBtn = document.getElementById("musicBtn");
+const stars = document.getElementById("stars");
 
-let playing = false;
+for(let i=0;i<650;i++){
 
-musicBtn.addEventListener("click",()=>{
+    const s=document.createElement("div");
 
-    if(!playing){
+    s.className="star";
 
-        music.play()
-        .then(()=>{
-            playing=true;
-            musicBtn.textContent="❚❚";
-        })
-        .catch(()=>{
-            alert("Tap the music button again to start the soundtrack.");
-        });
+    s.style.left=Math.random()*100+"%";
+    s.style.top=Math.random()*100+"%";
 
-    }else{
+    const size=Math.random()*2+0.5;
 
-        music.pause();
-        playing=false;
-        musicBtn.textContent="♫";
+    s.style.width=size+"px";
+    s.style.height=size+"px";
 
-    }
+    s.style.setProperty(
+        "--t",
+        (Math.random()*5+2)+"s"
+    );
 
-});
+    s.style.animationDelay=
+        (-Math.random()*8)+"s";
 
-/* =========================================================
-   PUZZLE
-========================================================= */
+    stars.appendChild(s);
+}
 
-function solvePuzzle(){
 
-    const input =
-        document.getElementById("answer").value
-        .trim()
-        .toUpperCase();
+/* =====================================================
+   SPACE PARTICLE CANVAS
+===================================================== */
 
-    const result =
-        document.getElementById("result");
+const canvas=document.getElementById("space");
+const ctx=canvas.getContext("2d");
 
-    if(input==="TIME"){
+let W,H;
 
-        result.textContent=
-            "✓ CORRECT — TRANSMISSION RECEIVED.";
+function resize(){
 
-        result.style.color="white";
-
-    }else{
-
-        result.textContent=
-            "✕ INCORRECT — TRY AGAIN.";
-
-        result.style.color="#888";
-
-    }
+    W=canvas.width=innerWidth;
+    H=canvas.height=innerHeight;
 
 }
 
-/* =========================================================
-   REVEAL ON SCROLL
-========================================================= */
+resize();
 
-const observer =
-new IntersectionObserver(
-    entries=>{
+window.addEventListener("resize",resize);
 
-        entries.forEach(entry=>{
+const particles=[];
 
-            if(entry.isIntersecting){
+for(let i=0;i<1000;i++){
 
-                entry.target.classList.add("active");
+    particles.push({
 
-            }
+        x:(Math.random()-.5)*3000,
 
-        });
+        y:(Math.random()-.5)*3000,
 
-    },
-    {
-        threshold:.12
-    }
-);
+        z:Math.random()*3000+1,
 
-document
-.querySelectorAll(".reveal")
-.forEach(el=>observer.observe(el));
+        size:Math.random()*2+0.2,
 
-/* =========================================================
-   THREE.JS SPACE
-========================================================= */
+        speed:Math.random()*2+.3
 
-const canvas =
-document.getElementById("spaceCanvas");
-
-const scene =
-new THREE.Scene();
-
-const camera =
-new THREE.PerspectiveCamera(
-    70,
-    window.innerWidth/window.innerHeight,
-    .1,
-    2000
-);
-
-camera.position.z=5;
-
-const renderer =
-new THREE.WebGLRenderer({
-    canvas,
-    antialias:true,
-    alpha:true
-});
-
-renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio,2)
-);
-
-renderer.setSize(
-    window.innerWidth,
-    window.innerHeight
-);
-
-/* =========================================================
-   STARS
-========================================================= */
-
-const starGeometry =
-new THREE.BufferGeometry();
-
-const starCount=7000;
-
-const positions =
-new Float32Array(starCount*3);
-
-for(let i=0;i<starCount*3;i+=3){
-
-    positions[i] =
-        (Math.random()-.5)*1000;
-
-    positions[i+1] =
-        (Math.random()-.5)*1000;
-
-    positions[i+2] =
-        (Math.random()-.5)*1000;
+    });
 
 }
 
-starGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        positions,
-        3
-    )
-);
+let scrollVelocity=0;
+let lastScroll=scrollY;
 
-const starMaterial =
-new THREE.PointsMaterial({
-    color:0xffffff,
-    size:.7,
-    transparent:true,
-    opacity:.8
-});
+function drawSpace(){
 
-const stars =
-new THREE.Points(
-    starGeometry,
-    starMaterial
-);
+    ctx.fillStyle="rgba(0,0,8,.45)";
+    ctx.fillRect(0,0,W,H);
 
-scene.add(stars);
+    const cx=W/2;
+    const cy=H/2;
 
-/* =========================================================
-   GALAXY DUST
-========================================================= */
+    particles.forEach(p=>{
 
-const dustGeometry =
-new THREE.BufferGeometry();
+        p.z-=p.speed+(scrollVelocity*.03);
 
-const dustCount=1800;
+        if(p.z<1){
 
-const dustPositions =
-new Float32Array(dustCount*3);
+            p.z=3000;
 
-for(let i=0;i<dustCount*3;i+=3){
+            p.x=(Math.random()-.5)*3000;
 
-    const radius =
-        10+Math.random()*40;
+            p.y=(Math.random()-.5)*3000;
 
-    const angle =
-        Math.random()*Math.PI*2;
+        }
 
-    dustPositions[i] =
-        Math.cos(angle)*radius;
+        const scale=500/p.z;
 
-    dustPositions[i+1] =
-        (Math.random()-.5)*12;
+        const x=cx+p.x*scale;
+        const y=cy+p.y*scale;
 
-    dustPositions[i+2] =
-        Math.sin(angle)*radius;
+        if(
+            x<0 ||
+            x>W ||
+            y<0 ||
+            y>H
+        ) return;
 
+        const r=Math.max(
+            .2,
+            p.size*scale*3
+        );
+
+        ctx.beginPath();
+
+        ctx.arc(x,y,r,0,Math.PI*2);
+
+        ctx.fillStyle=
+            `rgba(180,220,255,${Math.min(1,scale*1.5)})`;
+
+        ctx.fill();
+
+    });
+
+    scrollVelocity*=.9;
+
+    requestAnimationFrame(drawSpace);
 }
 
-dustGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        dustPositions,
-        3
-    )
-);
+drawSpace();
 
-const dustMaterial =
-new THREE.PointsMaterial({
-    color:0x777777,
-    size:1,
-    transparent:true,
-    opacity:.3
+
+/* =====================================================
+   SCROLL VELOCITY
+===================================================== */
+
+window.addEventListener("scroll",()=>{
+
+    scrollVelocity=
+        Math.abs(scrollY-lastScroll);
+
+    lastScroll=scrollY;
+
 });
 
-const dust =
-new THREE.Points(
-    dustGeometry,
-    dustMaterial
-);
 
-scene.add(dust);
-
-/* =========================================================
-   MOUSE MOVEMENT
-========================================================= */
+/* =====================================================
+   PARALLAX UNIVERSE
+===================================================== */
 
 let mouseX=0;
 let mouseY=0;
 
-window.addEventListener(
-    "pointermove",
-    e=>{
+window.addEventListener("mousemove",e=>{
 
-        mouseX =
-            (e.clientX/window.innerWidth-.5);
+    mouseX=
+        (e.clientX-innerWidth/2)/innerWidth;
 
-        mouseY =
-            (e.clientY/window.innerHeight-.5);
+    mouseY=
+        (e.clientY-innerHeight/2)/innerHeight;
 
-    }
-);
+    document.querySelectorAll(".nebula")
+    .forEach((n,i)=>{
 
-/* =========================================================
-   SCROLL
-========================================================= */
+        const amount=(i+1)*15;
 
-let scrollY=0;
+        n.style.transform=
+            `translate(${mouseX*amount}px,
+                       ${mouseY*amount}px)`;
 
-window.addEventListener(
-    "scroll",
-    ()=>{
+    });
 
-        scrollY=window.scrollY;
+});
 
-    }
-);
 
-/* =========================================================
-   ANIMATION LOOP
-========================================================= */
+/* =====================================================
+   CURSOR
+===================================================== */
 
-function animate(){
+const cursor=
+    document.getElementById("cursor");
 
-    requestAnimationFrame(animate);
+const label=
+    document.querySelector(".cursor-label");
 
-    stars.rotation.y += .00015;
-    stars.rotation.x += .00004;
+const trails=[];
 
-    dust.rotation.y -= .0003;
+for(let i=0;i<18;i++){
 
-    camera.position.x +=
-        (mouseX*.35-camera.position.x)*.025;
+    const t=document.createElement("div");
 
-    camera.position.y +=
-        (-mouseY*.35-camera.position.y)*.025;
+    t.className="trail";
 
-    camera.position.z =
-        5 + Math.sin(scrollY*.0008)*.25;
+    document.body.appendChild(t);
 
-    renderer.render(
-        scene,
-        camera
+    trails.push({
+        el:t,
+        x:0,
+        y:0
+    });
+
+}
+
+let cursorX=0;
+let cursorY=0;
+
+window.addEventListener("mousemove",e=>{
+
+    cursorX=e.clientX;
+    cursorY=e.clientY;
+
+});
+
+function cursorAnimation(){
+
+    cursor.style.left=cursorX+"px";
+    cursor.style.top=cursorY+"px";
+
+    label.style.left=cursorX+"px";
+    label.style.top=cursorY+"px";
+
+    let x=cursorX;
+    let y=cursorY;
+
+    trails.forEach((t,i)=>{
+
+        t.x+=(x-t.x)*(.18-i*.006);
+        t.y+=(y-t.y)*(.18-i*.006);
+
+        t.el.style.left=t.x+"px";
+        t.el.style.top=t.y+"px";
+
+        const scale=1-i/trails.length;
+
+        t.el.style.transform=
+            `translate(-50%,-50%) scale(${scale})`;
+
+        x=t.x;
+        y=t.y;
+
+    });
+
+    requestAnimationFrame(cursorAnimation);
+
+}
+
+cursorAnimation();
+
+
+/* =====================================================
+   CURSOR INTERACTION
+===================================================== */
+
+document.querySelectorAll("a,.card")
+.forEach(el=>{
+
+    el.addEventListener("mouseenter",()=>{
+
+        cursor.style.width="50px";
+        cursor.style.height="50px";
+
+    });
+
+    el.addEventListener("mouseleave",()=>{
+
+        cursor.style.width="25px";
+        cursor.style.height="25px";
+
+    });
+
+});
+
+
+/* =====================================================
+   SCROLL REVEAL
+===================================================== */
+
+const observer=
+    new IntersectionObserver(
+        entries=>{
+
+            entries.forEach(entry=>{
+
+                if(entry.isIntersecting){
+
+                    entry.target.classList.add("show");
+
+                }
+
+            });
+
+        },
+        {
+            threshold:.15
+        }
+    );
+
+document.querySelectorAll(".reveal")
+.forEach(el=>observer.observe(el));
+
+
+/* =====================================================
+   COSMIC COUNTER
+===================================================== */
+
+const counter=
+    document.getElementById("counter");
+
+let started=false;
+
+const counterObserver=
+    new IntersectionObserver(
+        entries=>{
+
+            if(entries[0].isIntersecting && !started){
+
+                started=true;
+
+                let value=0;
+
+                const target=13800000000;
+
+                const duration=3000;
+
+                const start=performance.now();
+
+                function update(time){
+
+                    const progress=
+                        Math.min(
+                            (time-start)/duration,
+                            1
+                        );
+
+                    value=
+                        Math.floor(
+                            target*progress
+                        );
+
+                    counter.textContent=
+                        value.toLocaleString();
+
+                    if(progress<1){
+
+                        requestAnimationFrame(update);
+
+                    }
+
+                }
+
+                requestAnimationFrame(update);
+
+            }
+
+        }
+    );
+
+counterObserver.observe(counter);
+
+
+/* =====================================================
+   CARD TILT
+===================================================== */
+
+document.querySelectorAll(".card")
+.forEach(card=>{
+
+    card.addEventListener("mousemove",e=>{
+
+        const rect=
+            card.getBoundingClientRect();
+
+        const x=
+            e.clientX-rect.left;
+
+        const y=
+            e.clientY-rect.top;
+
+        const rotateY=
+            (x/rect.width-.5)*12;
+
+        const rotateX=
+            (y/rect.height-.5)*-12;
+
+        card.style.transform=
+            `perspective(700px)
+             rotateX(${rotateX}deg)
+             rotateY(${rotateY}deg)
+             translateY(-8px)`;
+
+    });
+
+    card.addEventListener("mouseleave",()=>{
+
+        card.style.transform="";
+
+    });
+
+});
+
+
+/* =====================================================
+   INVISIBLE LOOPING MUSIC
+===================================================== */
+
+const music=
+    document.getElementById("spaceMusic");
+
+/*
+   The browser normally blocks autoplay with sound.
+   Once the visitor interacts/taps the page,
+   the music starts and loops forever.
+*/
+
+music.volume=0.35;
+
+function startMusic(){
+
+    music.play().catch(()=>{});
+
+    document.removeEventListener(
+        "click",
+        startMusic
+    );
+
+    document.removeEventListener(
+        "touchstart",
+        startMusic
     );
 
 }
 
-animate();
-
-/* =========================================================
-   RESIZE
-========================================================= */
-
-window.addEventListener(
-    "resize",
-    ()=>{
-
-        camera.aspect =
-            window.innerWidth/window.innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        );
-
-    }
+document.addEventListener(
+    "click",
+    startMusic,
+    {once:true}
 );
 
+document.addEventListener(
+    "touchstart",
+    startMusic,
+    {once:true}
+);
+
+
+/* =====================================================
+   EXTRA INFINITE MOTION
+===================================================== */
+
+let angle=0;
+
+function infiniteMotion(){
+
+    angle+=.15;
+
+    document.querySelectorAll(".planet-system")
+    .forEach((planet,i)=>{
+
+        planet.style.transform=
+            `rotate(${angle*(i+1)}deg)`;
+
+    });
+
+    requestAnimationFrame(infiniteMotion);
+
+}
+
+infiniteMotion();
+
+
+/* =====================================================
+   RANDOM COSMIC FLASHES
+===================================================== */
+
+setInterval(()=>{
+
+    const flash=
+        document.createElement("div");
+
+    flash.style.position="fixed";
+    flash.style.left=
+        Math.random()*100+"%";
+
+    flash.style.top=
+        Math.random()*100+"%";
+
+    flash.style.width="2px";
+    flash.style.height="2px";
+
+    flash.style.background="#fff";
+
+    flash.style.boxShadow=
+        "0 0 25px 8px rgba(255,255,255,.5)";
+
+    flash.style.borderRadius="50%";
+
+    flash.style.pointerEvents="none";
+
+    document.body.appendChild(flash);
+
+    flash.animate(
+        [
+            {
+                opacity:0,
+                transform:"scale(.2)"
+            },
+            {
+                opacity:1,
+                transform:"scale(2)"
+            },
+            {
+                opacity:0,
+                transform:"scale(.1)"
+            }
+        ],
+        {
+            duration:900,
+            easing:"ease-out"
+        }
+    );
+
+    setTimeout(
+        ()=>flash.remove(),
+        1000
+    );
+
+},1800);
+
 </script>
-
-<!-- =====================================================
-     THREE.JS
-===================================================== -->
-
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
 </body>
 </html>
